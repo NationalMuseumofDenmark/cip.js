@@ -1,3 +1,7 @@
+CIP documentation
+-----------------
+You can find the documentation for the CIP API here: <http://samlinger.natmus.dk/CIP/doc/index.html>
+
 Integrated AJAX library
 -----------------------
 Right now I'm using [qwest] becuase the interface is neat. It's about 4KiB.
