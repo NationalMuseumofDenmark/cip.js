@@ -1,10 +1,12 @@
 <html>
   <head>
+    <script src="bitblueprint-credentials.js"></script>
     <script src="jsNatmus.js"></script>
   </head>
   <body>
     <script>
-      Natmus.session_open();
+      var nm = new Natmus();
+      nm.session_open(BB_USERNAME, BB_PASSWORD);
     </script>
   </body>
 </html>
