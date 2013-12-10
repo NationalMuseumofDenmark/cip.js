@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1052.3622"
+   height="744.09448"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="overview.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="468.24922"
+     inkscape:cy="406.50925"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1">
+    <sodipodi:guide
+       orientation="1,0"
+       position="30.935922,680.71655"
+       id="guide3092" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-308.2677)">
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+       x="26.988281"
+       y="375.21933"
+       id="text3028"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3030"
+         x="26.988281"
+         y="375.21933"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans">Nationalmuseet CIP interface</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3032"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Inconsolata;font-style:normal;font-weight:500;font-size:14px;line-height:125%;letter-spacing:0px;word-spacing:0px;-inkscape-font-specification:Inconsolata Medium;font-stretch:normal;font-variant:normal"><flowRegion
+         id="flowRegion3034"><rect
+           id="rect3036"
+           width="630"
+           height="70"
+           x="34.285713"
+           y="81.237343"
+           style="font-weight:500;-inkscape-font-specification:Inconsolata Medium;font-size:14px" /></flowRegion><flowPara
+         id="flowPara3038"></flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3040"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Inconsolata;font-style:normal;font-weight:500;font-size:12px;line-height:125%;letter-spacing:0px;word-spacing:0px;-inkscape-font-specification:Inconsolata Medium;font-stretch:normal;font-variant:normal"><flowRegion
+         id="flowRegion3042"><rect
+           id="rect3044"
+           width="782.85712"
+           height="144.28572"
+           x="35.714287"
+           y="82.665909"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara3046"></flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3048"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+       transform="translate(-5.7265625,302.55341)"><flowRegion
+         id="flowRegion3050"><rect
+           id="rect3052"
+           width="1012.8571"
+           height="291.42856"
+           x="35.714287"
+           y="84.094482" /></flowRegion><flowPara
+         id="flowPara3054"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans">Split into a low-level interface taking care of keeping a session with the CIP service, and a high-level API for application developers, taking care of an object-relation model.</flowPara></flowRoot>    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 261.42857,466.6479 0,540 1.42857,0"
+       id="path3056"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3058"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Droid Sans Bold"
+       transform="translate(-1.4921875,302.61509)"><flowRegion
+         id="flowRegion3060"><rect
+           id="rect3062"
+           width="218.57143"
+           height="534.28571"
+           x="31.428572"
+           y="162.66591"
+           style="font-weight:bold;-inkscape-font-specification:Droid Sans Bold" /></flowRegion><flowPara
+         id="flowPara3064"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold">CIPClient</flowPara><flowPara
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+         id="flowPara3082" /><flowPara
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+         id="flowPara3066" /><flowPara
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+         id="flowPara3068" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+       x="29.53125"
+       y="734.50507"
+       id="text3070"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3072"
+         x="29.53125"
+         y="734.50507"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono">ciprequest</tspan><tspan
+         sodipodi:role="line"
+         x="29.53125"
+         y="754.50507"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
+         id="tspan3074" /><tspan
+         sodipodi:role="line"
+         x="29.53125"
+         y="774.50507"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
+         id="tspan3076">session_open</tspan><tspan
+         sodipodi:role="line"
+         x="29.53125"
+         y="794.50507"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
+         id="tspan3078" /><tspan
+         sodipodi:role="line"
+         x="29.53125"
+         y="814.50507"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
+         id="tspan3080">session_close</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3084"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+       transform="translate(0,308.2677)"><flowRegion
+         id="flowRegion3086"><rect
+           id="rect3088"
+           width="221.42857"
+           height="149.28572"
+           x="30.714285"
+           y="182.66591" /></flowRegion><flowPara
+         id="flowPara3090"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans">Supports user authenticating with username and password to a given CIP endpoint (specified in the instantiation of the CIPClient). Keeps track of the session ID and adds it to all subsequent API calls.</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3058-8"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Droid Sans Bold"
+       transform="translate(243.92467,302.61509)"><flowRegion
+         id="flowRegion3060-1"><rect
+           id="rect3062-4"
+           width="218.57143"
+           height="534.28571"
+           x="31.428572"
+           y="162.66591"
+           style="font-weight:bold;-inkscape-font-specification:Droid Sans Bold" /></flowRegion><flowPara
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold"
+         id="flowPara3068-2">NatMusClient</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3158"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+       transform="translate(-69.700522,171.89711)"><flowRegion
+         id="flowRegion3160"><rect
+           id="rect3162"
+           width="370.72598"
+           height="75.761444"
+           x="734.38092"
+           y="150.12479"
+           style="text-align:end;text-anchor:end" /></flowRegion><flowPara
+         id="flowPara3164"
+         style="font-size:16px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;text-anchor:end;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Italic">4 December 2013 - jc@bitblueprint.com</flowPara></flowRoot>  </g>
+</svg>

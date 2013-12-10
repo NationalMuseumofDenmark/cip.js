@@ -1,0 +1,43 @@
+\documentclass{article}
+
+\title{JavaScript API for Nationalmuseet collections}
+\author{Jens Christian Hillerup, BIT BLUEPRINT\\ \href{mailto:jc@bitblueprint.com}{\tt jc@bitblueprint.com}}
+\date{January 2014}
+
+\setlength{\parskip}{10pt}
+\setlength{\parindent}{0pt}
+
+\usepackage{hyperref}
+\usepackage{inconsolata}
+\usepackage{a4wide}
+\usepackage{mathpazo}
+\linespread{1.05}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+This document describes the JavaScript SDK for the collections provided by Nationalmuseet. They are written for application programmers to get quickly up to speed when developing apps or doing statistics with the data. 
+
+In order to maintain general applicability, the API is split into two layers of abstraction. This is to shield the Nationalmuseet-specific parts from the general CIP functionality.
+\begin{enumerate}
+\item{The first layer keeps a connection to a Canto CIP endpoint as specified in the Cumulus Integration Platform specification.}
+\item{The second layer provides higher-level abstractions that allow listing and categorization of the data. It also formats the data as easily-usable JavaScript objects instead of the structures provided by CIP.}
+\end{enumerate}
+
+When describing function names or variable names, a \texttt{monospaced} font is used.
+
+\section{CIP.js}
+
+\subsection{\tt session\_open}
+
+\subsection{\tt session\_close}
+
+\subsection{\tt session\_ciprequest}
+
+\section{NatMus.js}
+
+\end{document}
