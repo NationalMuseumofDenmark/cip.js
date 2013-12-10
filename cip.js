@@ -1,3 +1,11 @@
+/**
+ * CIP.js - a CIP client in JavaScript
+ * Jens Christian Hillerup, BIT BLUEPRINT - jc@bitblueprint.com
+ * 
+ * This code includes the Qwest library in order to handle AJAX
+ * requests in a nice way. Qwest is released under an MIT license.
+ */
+
 /*
  qwest, ajax library with promises and XHR2 support
 
@@ -14,7 +22,7 @@ function CIPClient(base) {
     this.DEBUG = true;
 
     this.ciprequest = function(name, options, success, error) {
-        var self = this;
+        var self = this; // TODO: Fix this hack
         
         var queryStringObject = { 
             apiversion: 4,
@@ -33,7 +41,13 @@ function CIPClient(base) {
         
         var jsessionid_container = this.jsessionid===null?"":";jsessionid=" + this.jsessionid;
         
-        return qwest.post(this.CIP_BASE + name + jsessionid_container, queryStringObject, {async: false})
+
+        return qwest.post(this.CIP_BASE + name + jsessionid_container, 
+                          queryStringObject, 
+                          {async:false},
+                          function() {
+                              // Set XMLHTTP properties here
+                          })
             .success(success || function(response) {
                 console.log(["default success", name, response]);
             })
@@ -50,7 +64,7 @@ function CIPClient(base) {
                             if (response.jsessionid) {
                                 self.jsessionid = response.jsessionid;
                                 console.log("Connected to CIP: "+self.jsessionid);
-
+                                
                                 successCallback(response);
                             } else {
                                 // fail
@@ -58,17 +72,14 @@ function CIPClient(base) {
                             }
                         },
                         function(response) {
-                            console.log(response);
+                            console.error("Could not log on to CIP.");
                         });
 
     };
-
+    
+    // BUG: Closing sessions doesn't work yet.
     this.session_close = function() {
         this.ciprequest("session/close", {});
         //qwest.post(this.CIP_BASE + "session/close", {jsessionid: this.jsessionid});
     };
-    
-
-    
-
 }
