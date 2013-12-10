@@ -3,8 +3,33 @@
     <script src="underscore-min.js"></script>
     <script src="bitblueprint-credentials.js"></script>
     <script src="cip.js"></script>
+    <script src="natmus-client.js"></script>
   </head>
   <body>
-    <script src="natmus-client.js"></script>
+
+    <script>
+      var cip = new CIPClient("http://samlinger.natmus.dk/CIP/");
+      var nm = new NatMus(cip);
+
+      nm.session_open(BB_USERNAME, BB_PASSWORD, function() {
+      var catalogs = nm.get_catalogs();
+      var tables = nm.get_tables(catalogs[3].name);
+      var layout = nm.get_layout(catalogs[3].name, tables[0]);
+      
+      // var catalog = catalog[0]
+      // var table = catalog.get_tables(search query?)
+      // for (record in table.get_records(query?)) { ... }
+
+      console.log(["layout = ", layout]);
+
+      // nm.cip.ciprequest("metadata/search/any/web", {
+      //     table: "AssetRecords",
+      //     quicksearchstring: "ID *",
+      //     debug: 1
+      // }, function(response) {
+      //     console.log(response);
+      // });
+      });
+    </script>
   </body>
 </html>

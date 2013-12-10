@@ -3,15 +3,6 @@
  * Jens Christian Hillerup, BIT BLUEPRINT - jc@bitblueprint.com
  */
 
-/**
- * TODO: it would be pretty cool if NatMus.prototype = CIP, since
- * NatMus cannot live without a CIP.js anyway.
- * 
- * TODO: Make an ORM around this. That would also remove some 
- * of the ugliness around doing searches because then we could 
- * just return an easily enumerable NatMusCollection object.
- */
-
 // Handy assertion function
 window.assert = function(condition, message) {
     if (!condition) {
@@ -19,7 +10,24 @@ window.assert = function(condition, message) {
     }
 };
 
+/**
+ * An object containing results from CIP searches. Enumerable.
+ * @constructor
+ * @þaram {NatMus} nm - A NatMus object.
+ */
+function NatMusCollection(nm) {
+    this.nm = nm;
+    assert (this.nm !== undefined);
+    
+    // TODO: Functionality
+}
 
+/**
+ * The Nationalmuseet object that can emit various other objects
+ * related to data gathering from Nationalmuseet.
+ * @constructor
+ * @param {CIPClient} cip - A CIP.js client object
+ */
 function NatMus(cip) {
     this.cip = cip;
     this.catalogs = null;
@@ -32,7 +40,7 @@ function NatMus(cip) {
         // If the CIP connection has a session ID, we're connected.
         return cip.jsessionid !== null;
     };
-
+    
     this.get_catalogs = function(force) {
         assert(this.is_connected());
 
@@ -88,25 +96,3 @@ function NatMus(cip) {
     }
 }
 
-var cip = new CIPClient("http://samlinger.natmus.dk/CIP/");
-var nm = new NatMus(cip);
-
-nm.session_open(BB_USERNAME, BB_PASSWORD, function() {
-    var catalogs = nm.get_catalogs();
-    var tables = nm.get_tables(catalogs[3].name);
-    var layout = nm.get_layout(catalogs[3].name, tables[0]);
-    
-    // var catalog = catalog[0]
-    // var table = catalog.get_tables(search query?)
-    // for (record in table.get_records(query?)) { ... }
-
-    console.log(["layout = ", layout]);
-
-    // nm.cip.ciprequest("metadata/search/any/web", {
-    //     table: "AssetRecords",
-    //     quicksearchstring: "ID *",
-    //     debug: 1
-    // }, function(response) {
-    //     console.log(response);
-    // });
-});
