@@ -8,16 +8,15 @@ window.console = window.console || {log: function() {}, error: function() {}};
 
 
 /**
- * The Nationalmuseet object that can emit various other objects
- * related to data gathering from Nationalmuseet.
- * @constructor
- * @param {CIPClient} cip - A CIP.js client object
+ * The Nationalmuseet config for CIP.js
  */
-function NatMus() {
-    this.constants = {
+var NatMusConfig = {
+    endpoint: "http://samlinger.natmus.dk/CIP/",
+    constants: {
         catch_all_alias: "any",
         layout_alias: "web"
-    };
-    console.log("NatMus object initialized");
-    
-}
+    },
+    catalog_aliases: {
+        "Frihedsmuseet": "FHM"
+    }
+};

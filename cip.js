@@ -22,8 +22,8 @@ function assert(condition, message) {
  * @constructor
  * @param {string} endpoint - The URL to the CIP endpoint
  */
-function CIPClient(endpoint) {
-    this.CIP_BASE = endpoint;
+function CIPClient(config) {
+    this.config = config;
     this.jsessionid = null;
     this.DEBUG = true;
     
@@ -67,7 +67,7 @@ function CIPClient(endpoint) {
             error = error.bind(this);
         }
 
-        return qwest.post(this.CIP_BASE + name + jsessionid_container, 
+        return qwest.post(this.config.endpoint + name + jsessionid_container, 
                           queryStringObject, 
                           {async:false},
                           function() {
@@ -141,6 +141,13 @@ function CIPClient(endpoint) {
         var returnvalue = null;
         this.ciprequest("metadata/getcatalogs", {}, function(response) {
             this.cache.catalogs =  response.catalogs;
+            
+            /* Assign an alias to the object if it exists in the dictionary 
+             * given by the CIP handle. */
+            for (var i = 0; i < this.cache.catalogs.length; i++) {
+                this.cache.catalogs[i].alias = this.config.catalog_aliases[this.cache.catalogs[i].name];
+            }
+
             returnvalue = this.cache.catalogs;
         });
         return returnvalue;
@@ -156,7 +163,7 @@ function CIPClient(endpoint) {
         
         console.log(this);
 
-        this.ciprequest("metadata/gettables/"+this.constants.catch_all_alias, {catalogname: catalog.name}, function(response) {
+        this.ciprequest("metadata/gettables/"+this.config.constants.catch_all_alias, {catalogname: catalog.name}, function(response) {
             returnvalue = response.tables;
         });
         
@@ -173,7 +180,7 @@ function CIPClient(endpoint) {
         assert(this.is_connected());
         var returnvalue = null;
 
-        this.ciprequest("metadata/getlayout/"+this.constants.web_alias, {
+        this.ciprequest("metadata/getlayout/"+this.config.constants.web_alias, {
             catalogname: catalog.name,
             table: table
         }, function(response) {
@@ -192,8 +199,12 @@ function CIPClient(endpoint) {
      * @param {string} query - The query to search for.
      */
     this.search = function(catalog, table, query) {
-        assert(this.is_connected());
-        
-        
+        assert(this.is_connected());        
+        assert(catalog.alias !== undefined, "Catalog must have an alias.");
+
+        this.ciprequest("metadata/search/"+catalog.alias, {
+            quicksearchstring: query,
+            table: table
+        });
     };
 }

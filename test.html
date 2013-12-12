@@ -9,36 +9,15 @@
   <body>
 
     <script>
-      NatMus.prototype = new CIPClient("http://samlinger.natmus.dk/CIP/");
-      var nm = new NatMus();
+      nm = new CIPClient(NatMusConfig);
       
-      
-
       nm.session_open(BB_USERNAME, BB_PASSWORD, function() {
       var catalogs = nm.get_catalogs();
       var tables = nm.get_tables(catalogs[3]);
       var layout = nm.get_layout(catalogs[3], tables[0]);
-
-      console.log(tables[0]);
-      
+     
       var results = nm.search(catalogs[3], tables[0]);
 
-
-      
-      // var catalog = catalog[0]
-      // var table = catalog.get_tables(search query?)
-      // for (record in table.get_records(query?)) { ... }
-
-      console.log(["layout = ", layout]);
-
-      // nm.cip.ciprequest("metadata/search/any/web", {
-      //     table: "AssetRecords",
-      //     quicksearchstring: "ID *",
-      //     debug: 1
-      // }, function(response) {
-      //     console.log(response);
-      // });
-      });
     </script>
   </body>
 </html>
