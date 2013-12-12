@@ -29,7 +29,6 @@ function NatMusCollection(nm) {
  * @param {CIPClient} cip - A CIP.js client object
  */
 function NatMus(cip) {
-    this.cip = cip;
     this.catalogs = null;
     
     /**
@@ -55,7 +54,7 @@ function NatMus(cip) {
      */
     this.is_connected = function() {
         // If the CIP connection has a session ID, we're connected.
-        return cip.jsessionid !== null;
+        return this.jsessionid !== null;
     };
     
     /**
@@ -70,7 +69,7 @@ function NatMus(cip) {
         }
 
         var returnvalue = null;
-        nm.cip.ciprequest("metadata/getcatalogs", {}, function(response) {
+        this.ciprequest("metadata/getcatalogs", {}, function(response) {
             this.catalogs =  response.catalogs;
             returnvalue = this.catalogs;
         });
@@ -91,13 +90,13 @@ function NatMus(cip) {
 
     /**
      * Returns a list of tables in a given catalog.
-     * @param {string} catalog : The catalog, as returned by NatMus#get_catalogs.
+     * @param {object} catalog : The catalog, as returned by NatMus#get_catalogs.
      */
     this.get_tables = function(catalog) {
         assert(this.is_connected());
         var returnvalue = null;
         
-        cip.ciprequest("metadata/gettables/any", {catalogname: catalog.name}, function(response) {
+        this.ciprequest("metadata/gettables/any", {catalogname: catalog.name}, function(response) {
             returnvalue = response.tables;
         });
         
@@ -113,7 +112,7 @@ function NatMus(cip) {
         assert(this.is_connected());
         var returnvalue = null;
 
-        nm.cip.ciprequest("metadata/getlayout/web", {
+        this.ciprequest("metadata/getlayout/web", {
             catalogname: catalog.name,
             table: table
         }, function(response) {
@@ -131,10 +130,9 @@ function NatMus(cip) {
      * @param {function} success: The success callback.
      * @param {function} error: The failure callback.
      */
-    this.session_open = function(username, password, success, error) {
-        cip.session_open(username, password, success, error);
-    };
+    // this.session_open = function(username, password, success, error) {
+    //     cip.session_open(username, password, success, error);
+    // };
     
     init();
 }
-
