@@ -1,7 +1,6 @@
 <html>
   <head>
     <script src="qwest.js"></script>
-    <script src="underscore-min.js"></script>
     <script src="bitblueprint-credentials.js"></script>
     <script src="cip.js"></script>
     <script src="natmus.js"></script>
@@ -15,9 +14,9 @@
       var catalogs = nm.get_catalogs();
       var tables = nm.get_tables(catalogs[3]);
       var layout = nm.get_layout(catalogs[3], tables[0]);
-     
+      
       var results = nm.search(catalogs[3], tables[0]);
-
+      });
     </script>
   </body>
 </html>

@@ -184,7 +184,6 @@ function CIPClient(config) {
             catalogname: catalog.name,
             table: table
         }, function(response) {
-            // var list = _.pluck(response.fields, 'name');
             returnvalue = response.fields;
         }); 
         
