@@ -13,7 +13,7 @@ window.assert = function(condition, message) {
 /**
  * An object containing results from CIP searches. Enumerable.
  * @constructor
- * @þaram {NatMus} nm - A NatMus object.
+ * @param {NatMus} nm - A NatMus object.
  */
 function NatMusCollection(nm) {
     this.nm = nm;
@@ -32,15 +32,36 @@ function NatMus(cip) {
     this.cip = cip;
     this.catalogs = null;
     
-    this.onready = function() {
-        // TODO: This is called once the CIP is connected. Cache stuff here?
+    /**
+     * Inner function that is called when the NatMus object is ready.
+     */
+    var _onready = function() {
+        
+    };
+    
+    /**
+     * The "constructor" function.
+     */
+    var init = function() {
+        // TODO: make these things work
+
+        // if (this.is_connected()) {
+        //     this._onready();
+        // }
     };
 
+    /**
+     * Returns true if the underlying CIP connection is established.
+     */
     this.is_connected = function() {
         // If the CIP connection has a session ID, we're connected.
         return cip.jsessionid !== null;
     };
     
+    /**
+     * Returns a list of catalogs on the CIP service. Caches the result.
+     * @param {boolean} force : Ask the server for the list, regardless of the cache
+     */
     this.get_catalogs = function(force) {
         assert(this.is_connected());
 
@@ -50,49 +71,70 @@ function NatMus(cip) {
 
         var returnvalue = null;
         nm.cip.ciprequest("metadata/getcatalogs", {}, function(response) {
-            console.log(response.catalogs);
             this.catalogs =  response.catalogs;
             returnvalue = this.catalogs;
         });
         return returnvalue;
     };
-    
+
+    /**
+     * Performs a search in the CIP.
+     * @param {object} catalog : The catalog to search in, as returned by NatMus#get_catalogs.
+     * @param {object} table : The table to search in, as returned by NatMus#get_tables.
+     * @param {string} query : The query to search for.
+     */
+    this.search = function(catalog, table, query) {
+        assert(this.is_connected());
+        
+        
+    };
+
+    /**
+     * Returns a list of tables in a given catalog.
+     * @param {string} catalog : The catalog, as returned by NatMus#get_catalogs.
+     */
     this.get_tables = function(catalog) {
         assert(this.is_connected());
         var returnvalue = null;
         
-        nm.cip.ciprequest("metadata/gettables/any", {catalogname: catalog}, function(response) {
-            //console.log(response);
+        cip.ciprequest("metadata/gettables/any", {catalogname: catalog.name}, function(response) {
             returnvalue = response.tables;
         });
         
         return returnvalue;
     };
     
+    /**
+     * Returns the layout of a given table in a given catalog.
+     * @param {object} catalog: The catalog, as returned by NatMus#get_catalogs.
+     * @param {object} table: The table, as returned by NatMus#get_tables.
+     */
     this.get_layout = function(catalog, table) {
+        assert(this.is_connected());
         var returnvalue = null;
 
         nm.cip.ciprequest("metadata/getlayout/web", {
-            catalogname: catalog,
+            catalogname: catalog.name,
             table: table
         }, function(response) {
-            console.log(response.fields);
-            var list = _.pluck(response.fields, 'name');
-
-            console.log(list);
+            // var list = _.pluck(response.fields, 'name');
+            returnvalue = response.fields;
         }); 
         
         return returnvalue;
     };
-
-    this.session_open = function(username, password, success) {
-        cip.session_open(username, password, success);
+    
+    /**
+     * Establishes a connection from the underlying CIP to its endpoint. Delegates to CIPClient#session_open.
+     * @param {string} username : The username for the CIP service
+     * @param {string} password : The password for the CIP service.
+     * @param {function} success: The success callback.
+     * @param {function} error: The failure callback.
+     */
+    this.session_open = function(username, password, success, error) {
+        cip.session_open(username, password, success, error);
     };
     
-
-    // If the given CIP is already connected, run our onready
-    if (this.is_connected()) {
-        this.onready();
-    }
+    init();
 }
 
