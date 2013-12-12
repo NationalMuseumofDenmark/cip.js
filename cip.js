@@ -35,6 +35,10 @@ function CIPClient(endpoint) {
     this.jsessionid = null;
     this.DEBUG = true;
     
+    this.cache = {
+        catalogs: null
+    };
+
     /** 
      * Makes a request to the CIP server.
      * 
@@ -131,14 +135,14 @@ function CIPClient(endpoint) {
     this.get_catalogs = function(force) {
         assert(this.is_connected());
 
-        if (force !== true && this.catalogs !== null) {
-            return this.catalogs;
+        if (force !== true && this.cache.catalogs !== null) {
+            return this.cache.catalogs;
         }
 
         var returnvalue = null;
         this.ciprequest("metadata/getcatalogs", {}, function(response) {
-            this.catalogs =  response.catalogs;
-            returnvalue = this.catalogs;
+            this.cache.catalogs =  response.catalogs;
+            returnvalue = this.cache.catalogs;
         });
         return returnvalue;
     };
