@@ -26,3 +26,8 @@ Make sure you have [Google's Closure Compiler](https://developers.google.com/clo
 1.  Clone this repository.
 2.  Review `build.sh` and change the path to `jsdoc.js` to one that matches your system.
 3.  Run `build.sh`.
+
+
+Contact
+=======
+This project is primarily maintained by @jchillerup for [BIT BLUEPRINT](http://www.bitblueprint.com/).
