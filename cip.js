@@ -17,6 +17,144 @@ function assert(condition, message) {
 };
 
 /**
+ * Represents a catalog in CIP.
+ * @constructor
+ * @param {CIPClient} cip - The CIP client taking care of session handling etc.
+ * @param {object} options - An object as returned by the CIP describing the catalog.
+ */
+function CIPCatalog(cip, options) {
+    this.cip = cip;
+    
+    for (var key in options) {
+        this[key] = options[key];
+    }
+
+    this.alias = cip.config.catalog_aliases[this.name];
+    
+    /**
+     * Returns a list of tables in a given catalog.
+     * @param {object} catalog - The catalog, as returned by NatMus#get_catalogs.
+     */
+    this.get_tables = function() {
+        assert(cip.is_connected());
+        var returnvalue = [];
+        
+        // We need to cache the catalog because the callback later binds this to the CIP client.
+        var catalog = this;
+
+        this.cip.ciprequest("metadata/gettables/"+cip.config.constants.catch_all_alias, 
+                            {
+                                catalogname: this.name
+                            }, 
+                            function(response, cip) {
+                                for (var i = 0; i < response.tables.length; i++ ) {
+                                    returnvalue.push(new CIPTable(this, catalog, response.tables[i]));
+                                }
+                            });
+        
+        return returnvalue;
+    };
+}
+
+function CIPTable(cip, catalog, name) {
+    this.cip = cip;
+    this.catalog = catalog;
+    this.name = name;
+    
+    this.layout = null;
+
+    // TODO: Must have a reference to the layout it uses
+    
+    /**
+     * Returns the layout of a given table in a given catalog.
+     * @param {object} catalog - The catalog, as returned by NatMus#get_catalogs.
+     * @param {object} table - The table, as returned by NatMus#get_tables.
+     */
+    this.get_layout = function() {
+        assert(this.cip.is_connected());
+        var returnvalue = null;
+
+        this.cip.ciprequest("metadata/getlayout/"+this.cip.config.constants.layout_alias, {
+            catalogname: this.catalog.name,
+            table: this.name
+        }, function(response) {
+            returnvalue = new CIPLayout(this, response.fields);
+        }); 
+        
+        this.layout = returnvalue;
+
+        return returnvalue;
+    };
+    
+    this.search = function(query) {
+        return cip.search(this, query);
+    };
+
+}
+
+
+function CIPLayout(cip, fields) {
+    this.cip = cip;
+    this.fields = fields;
+    
+    // TODO: Cache
+
+    this.lookup_field = function (alias) {
+        for (var i = 0; i < fields.length; i++) {
+            if (this.fields[i].key === key) {
+                return this.fields[i];
+            }
+        }
+        
+        // If we didn't find the field, (explicitly) return undefined :(
+        return undefined;
+    };
+}
+
+
+/**
+ * A wrapper object for search results. Allows pagination, sorting, etc.
+ * @constructor
+ * @param {CIPClient} parent - An instance of a CIPClient to do the subsequent polling.
+ * @param {object} collection - An object consisting of the number of rows and collection ID of the available search results.
+ */
+function CIPSearchResult(parent, collection) {
+    this.cip = parent;
+    this.total_rows = collection.totalcount;
+    this.collection_id = collection.collection;
+    this.pointer = 0 ;
+
+    /**
+     * Gets a specified number of search results, conveniently formatted as 
+     * objects with key-value pairs (this structure differs from the API-returned
+     * one).
+     */
+    this.get = function(num_rows) {
+        var returnvalue = null;
+
+        if (num_rows === undefined) {
+            num_rows = 100;
+        }
+        
+        this.cip.ciprequest("metadata/getfieldvalues/web", 
+                            {
+                                collection: this.collection_id,
+                                startindex: this.pointer,
+                                maxreturned: num_rows
+                            }, 
+                            function(response) {
+                                returnvalue = response.items;
+                                this.pointer += num_rows;
+                            });
+        
+        // TODO: translate names of fields before returning
+        
+        return returnvalue;
+    };
+}
+
+
+/**
  * A general-purpose client library for CIP endpoints. Implements session
  * handling and requests.
  * @constructor
@@ -127,9 +265,9 @@ function CIPClient(config) {
         return this.jsessionid !== null;
     };    
     
-    /**
+    /** 
      * Returns a list of catalogs on the CIP service. Caches the result.
-     * @param {boolean} force - Ask the server for the list, regardless of the cache
+     * @param {boolean} force - Ask the server for the list, regardless of the cache 
      */
     this.get_catalogs = function(force) {
         assert(this.is_connected());
@@ -140,56 +278,16 @@ function CIPClient(config) {
 
         var returnvalue = null;
         this.ciprequest("metadata/getcatalogs", {}, function(response) {
-            this.cache.catalogs =  response.catalogs;
+            this.cache.catalogs =  [];
             
-            /* Assign an alias to the object if it exists in the dictionary 
-             * given by the CIP handle. */
-            for (var i = 0; i < this.cache.catalogs.length; i++) {
-                this.cache.catalogs[i].alias = this.config.catalog_aliases[this.cache.catalogs[i].name];
+            for (var i=0; i < response.catalogs.length; i++) {
+                this.cache.catalogs.push(new CIPCatalog(this, response.catalogs[i]));
             }
-
+            
             returnvalue = this.cache.catalogs;
         });
         return returnvalue;
     };
-    
-    /**
-     * Returns a list of tables in a given catalog.
-     * @param {object} catalog - The catalog, as returned by NatMus#get_catalogs.
-     */
-    this.get_tables = function(catalog) {
-        assert(this.is_connected());
-        var returnvalue = null;
-        
-        console.log(this);
-
-        this.ciprequest("metadata/gettables/"+this.config.constants.catch_all_alias, {catalogname: catalog.name}, function(response) {
-            returnvalue = response.tables;
-        });
-        
-        return returnvalue;
-    };
-
-    
-    /**
-     * Returns the layout of a given table in a given catalog.
-     * @param {object} catalog - The catalog, as returned by NatMus#get_catalogs.
-     * @param {object} table - The table, as returned by NatMus#get_tables.
-     */
-    this.get_layout = function(catalog, table) {
-        assert(this.is_connected());
-        var returnvalue = null;
-
-        this.ciprequest("metadata/getlayout/"+this.config.constants.web_alias, {
-            catalogname: catalog.name,
-            table: table
-        }, function(response) {
-            returnvalue = response.fields;
-        }); 
-        
-        return returnvalue;
-    };
-    
     
     /**
      * Performs a metadata search in the CIP.
@@ -197,13 +295,28 @@ function CIPClient(config) {
      * @param {object} table - The table to search in, as returned by NatMus#get_tables.
      * @param {string} query - The query to search for.
      */
-    this.search = function(catalog, table, query) {
+    this.search = function(table, query) {
         assert(this.is_connected());        
-        assert(catalog.alias !== undefined, "Catalog must have an alias.");
+        assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
+        assert(query !== undefined && query !== "", "Must define a query");
+        
+        var returnvalue = "";
 
-        this.ciprequest("metadata/search/"+catalog.alias, {
-            quicksearchstring: query,
-            table: table
-        });
+        this.ciprequest(
+            "metadata/search/"+table.catalog.alias, 
+            {
+                quicksearchstring: query,
+                table: table.name,
+                collection: ""  // We pass an empty collection to get the system to create one for us and return the name
+            }, 
+            function(response) {
+                // The API returns a collection ID which we will then proceed to enumerate
+                var collection = response.collection;
+                returnvalue = new CIPSearchResult(this, response);
+                
+            }
+        );
+        
+        return returnvalue;
     };
 }
