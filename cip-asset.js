@@ -10,7 +10,7 @@ function CIPAsset(cip, fields, catalog) {
     this.fields = fields;
     
     this.get_field = function(name) {
-    
+        // stub
     };
     
     this.get_field_names = function() {
@@ -35,5 +35,35 @@ function CIPAsset(cip, fields, catalog) {
                            );
         
         return returnvalue;
+    };
+    
+    this.get_preview_url = function()  {
+        return this.cip.config.endpoint + "preview/image/"+ catalog.alias +"/" + this.fields.id;
+    };
+    
+    this.get_thumbnail_url = function(given_options) {
+        var option_string = "";
+        var ampersand = "";
+        var options = {};
+        var allowed_attributes = ["size", "maxsize", "rotate", "format", "quality"];
+        
+        // Ensure that only the given options are added to the query string
+        for (var i in allowed_attributes) {
+            if (given_options[allowed_attributes[i]] !== undefined) {
+                if (allowed_attributes[i] !== "format") {
+                    options[allowed_attributes[i]] = parseInt(given_options[allowed_attributes[i]]);
+                } else {
+                    options[allowed_attributes[i]] = given_options[allowed_attributes[i]];
+                }
+            }
+        }
+
+        for (var option in options) {
+            option_string += ampersand + option + "=" + options[option];
+            
+            ampersand = "&";
+        }
+        
+        return this.cip.config.endpoint + "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id + "?" + option_string;
     };
 }
