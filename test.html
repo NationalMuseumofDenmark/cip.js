@@ -5,6 +5,7 @@
     <script src="cip-common.js"></script>
     <script src="cip-catalog.js"></script>
     <script src="cip-table.js"></script>
+    <script src="cip-asset.js"></script>
     <script src="cip-searchresult.js"></script>
     <script src="cip-layout.js"></script>
     <script src="cip.js"></script>
@@ -18,14 +19,20 @@
       nm.session_open(BB_USERNAME, BB_PASSWORD, function() {
       var catalogs = nm.get_catalogs();
       var tables = catalogs[2].get_tables();
+      console.log(["tables", tables]);
+      
       var layout = tables[0].get_layout();
 
       var result_obj = tables[0].search("a");
 
       results = result_obj.get();
 
-      console.log([layout, results]);
+      for (var i = 0; i < results.length; i++) {
+                          console.log(results[i].get_asset_url());
+                          }
+
       });
+
     </script>
   </body>
 </html>

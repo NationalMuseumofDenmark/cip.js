@@ -16,7 +16,8 @@ function CIPSearchResult(parent, collection) {
      * one).
      */
     this.get = function(num_rows) {
-        var returnvalue = null;
+        var returnvalue = [];
+        var self = this;
 
         if (num_rows === undefined) {
             num_rows = 100;
@@ -29,8 +30,11 @@ function CIPSearchResult(parent, collection) {
                                 maxreturned: num_rows
                             }, 
                             function(response) {
-                                returnvalue = response.items;
-                                this.pointer += num_rows;
+                                for (var i = 0; i<response.items.length; i++) {
+                                    returnvalue.push(new CIPAsset(this, response.items[i]));
+                                }
+                                
+                                self.pointer += num_rows;
                             });
         
         // TODO: translate names of fields before returning

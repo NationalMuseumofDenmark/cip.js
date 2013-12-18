@@ -143,7 +143,7 @@ function CIPClient(config) {
     };
     
     /**
-     * Performs a metadata search in the CIP.
+     * Performs a metadata search in the CIP. Called from higher-level classes.
      * @param {object} catalog - The catalog to search in, as returned by NatMus#get_catalogs.
      * @param {object} table - The table to search in, as returned by NatMus#get_tables.
      * @param {string} query - The query to search for.
@@ -170,6 +170,19 @@ function CIPClient(config) {
             }
         );
         
+        return returnvalue;
+    };
+    
+    
+    /**
+     * Gets the version of the various services on the CIP stack.
+     * @return object
+     */
+    this.get_version = function() {
+        var returnvalue = null;
+        this.ciprequest("system/getversion", {}, function(response) {
+            returnvalue = response.version;
+        });
         return returnvalue;
     };
 }

@@ -13,7 +13,7 @@ function CIPLayout(cip, fields) {
     /**
      * Look up a field name given a key.
      * @param {string} key - The key to search for
-     * @return {string} The name belonging to the specified key, or undefined if the key could not be found.
+     * @return string The name belonging to the specified key, or undefined if the key could not be found.
      */
     this.lookup_field = function (key) {
         for (var i = 0; i < fields.length; i++) {
