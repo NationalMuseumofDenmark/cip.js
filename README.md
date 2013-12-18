@@ -32,4 +32,4 @@ Contact
 =======
 This project is primarily maintained by [@jchillerup](https://github.com/jchillerup) for [BIT BLUEPRINT](http://www.bitblueprint.com/).
 
-The BIT BLUEPRINT team is available by email or live by IRC on #bitblueprint at irc.freenode.net.
+The BIT BLUEPRINT team is available by email or live by IRC on [#bitblueprint at irc.freenode.net](http://webchat.freenode.net/?channels=bitblueprint).
