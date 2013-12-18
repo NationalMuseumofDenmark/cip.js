@@ -1,11 +1,12 @@
 /**
  * A wrapper object for search results. Allows pagination, sorting, etc.
  * @constructor
- * @param {CIPClient} parent - An instance of a CIPClient to do the subsequent polling.
+ * @param {CIPClient} cip - An instance of a CIPClient to do the subsequent polling.
  * @param {object} collection - An object consisting of the number of rows and collection ID of the available search results.
+ * @param {CIPCatalog} catalog - The catalog 
  */
-function CIPSearchResult(parent, collection) {
-    this.cip = parent;
+function CIPSearchResult(cip, collection, catalog) {
+    this.cip = cip;
     this.total_rows = collection.totalcount;
     this.collection_id = collection.collection;
     this.pointer = 0 ;
@@ -31,7 +32,7 @@ function CIPSearchResult(parent, collection) {
                             }, 
                             function(response) {
                                 for (var i = 0; i<response.items.length; i++) {
-                                    returnvalue.push(new CIPAsset(this, response.items[i]));
+                                    returnvalue.push(new CIPAsset(this, response.items[i], catalog));
                                 }
                                 
                                 self.pointer += num_rows;

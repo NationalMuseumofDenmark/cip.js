@@ -165,7 +165,7 @@ function CIPClient(config) {
             function(response) {
                 // The API returns a collection ID which we will then proceed to enumerate
                 var collection = response.collection;
-                returnvalue = new CIPSearchResult(this, response);
+                returnvalue = new CIPSearchResult(this, response, table.catalog);
                 
             }
         );
