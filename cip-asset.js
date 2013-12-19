@@ -48,12 +48,14 @@ function CIPAsset(cip, fields, catalog) {
         var allowed_attributes = ["size", "maxsize", "rotate", "format", "quality"];
         
         // Ensure that only the given options are added to the query string
-        for (var i in allowed_attributes) {
-            if (given_options[allowed_attributes[i]] !== undefined) {
-                if (allowed_attributes[i] !== "format") {
-                    options[allowed_attributes[i]] = parseInt(given_options[allowed_attributes[i]]);
-                } else {
-                    options[allowed_attributes[i]] = given_options[allowed_attributes[i]];
+        if (given_options !== undefined) {
+            for (var i in allowed_attributes) {
+                if (given_options[allowed_attributes[i]] !== undefined) {
+                    if (allowed_attributes[i] !== "format") {
+                        options[allowed_attributes[i]] = parseInt(given_options[allowed_attributes[i]]);
+                    } else {
+                        options[allowed_attributes[i]] = given_options[allowed_attributes[i]];
+                    }
                 }
             }
         }
