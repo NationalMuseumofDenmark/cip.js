@@ -9,7 +9,7 @@
     <script src="lib/cip-searchresult.js"></script>
     <script src="lib/cip-layout.js"></script>
     <script src="lib/cip.js"></script>
-    <script src="lib/natmus.js"></script>
+    <script src="lib/natmus.js" charset="utf-8"></script>
     <script src="vendor/zepto.min.js"></script>
     </head>
     <body>
@@ -25,14 +25,13 @@
     <script>
     nm = new CIPClient(NatMusConfig);
 
-
-
 nm.session_open(BB_USERNAME,
                 BB_PASSWORD,
                 function() {
                     $("#div1").click(function() {
                         var catalogs = nm.get_catalogs();
-                        var tables = catalogs[2].get_tables();
+    console.log(catalogs);
+                        var tables = catalogs[3].get_tables();
                         var layout = tables[0].get_layout();
                         var result_obj = tables[0].search("b");
                         var results = result_obj.get();
