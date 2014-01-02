@@ -1,5 +1,5 @@
 <html>
-  <head>
+    <head>
     <script src="vendor/qwest.js"></script>
     <script src="bitblueprint-credentials.js"></script>
     <script src="lib/cip-common.js"></script>
@@ -10,29 +10,54 @@
     <script src="lib/cip-layout.js"></script>
     <script src="lib/cip.js"></script>
     <script src="lib/natmus.js"></script>
-  </head>
-  <body>
+    <script src="vendor/zepto.min.js"></script>
+    </head>
+    <body>
+
+<div id="div1" style="width: 300px; height: 300px; background: #f00;">
+
+</div>
+
+<div id="div2" style="width: 300px; height: 300px; background: #00f;">
+
+</div>
 
     <script>
-      nm = new CIPClient(NatMusConfig);
-      
-      nm.session_open(BB_USERNAME, BB_PASSWORD, function() {
-      var catalogs = nm.get_catalogs();
-      var tables = catalogs[2].get_tables();
-      console.log(["tables", tables]);
-      
-      var layout = tables[0].get_layout();
+    nm = new CIPClient(NatMusConfig);
 
-      var result_obj = tables[0].search("a");
 
-      results = result_obj.get();
 
-      for (var i = 0; i < results.length; i++) {
-                          console.log(results[i].get_thumbnail_url());
-                          }
+nm.session_open(BB_USERNAME,
+                BB_PASSWORD,
+                function() {
+                    $("#div1").click(function() {
+                        var catalogs = nm.get_catalogs();
+                        var tables = catalogs[2].get_tables();
+                        var layout = tables[0].get_layout();
+                        var result_obj = tables[0].search("b");
+                        var results = result_obj.get();
+                    
+                        
+                        $(this).html(results[99].get_thumbnail_url());
+                    });
 
-      });
+                    $("#div2").click(function() {
+                        var catalogs = nm.get_catalogs();
+                        var tables = catalogs[2].get_tables();
+                        var layout = tables[0].get_layout();
+                        var result_obj = tables[0].search("a");
 
-    </script>
-  </body>
-</html>
+                        var results = result_obj.get();
+                    
+                        $(this).html(results[99].get_thumbnail_url());
+                    });
+                    
+
+                }
+               );
+
+console.log("hvad");
+
+</script>
+    </body>
+    </html>
