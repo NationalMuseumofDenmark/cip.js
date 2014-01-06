@@ -16,6 +16,7 @@ $CLOSURE_COMPILER build/cip.min.js lib/natmus.js >> build/cip+natmus.min.js
 
 zip -r build/cip+natmus.zip doc;
 
+mkdir build
 cd build
 zip cip+natmus.zip cip+natmus.min.js
 zip cip+natmus.zip cip.min.js
