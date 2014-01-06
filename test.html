@@ -29,28 +29,20 @@ nm.session_open(BB_USERNAME,
                 BB_PASSWORD,
                 function() {
                     $("#div1").click(function() {
-                        var catalogs = nm.get_catalogs();
-    console.log(catalogs);
-                        var tables = catalogs[3].get_tables();
-                        var layout = tables[0].get_layout();
-                        var result_obj = tables[0].search("b");
-                        var results = result_obj.get();
-                    
-                        
-                        $(this).html(results[99].get_thumbnail_url());
+                        nm.get_catalogs(function(catalogs) {
+                            catalogs[3].get_tables(function(tables) {
+                                tables[0].search("b", function(results) {
+                                    console.log(['yay', results])
+
+                                    blah = results.get(100);
+                                    console.log(blah);
+                                });
+                            });
+                        });
                     });
 
                     $("#div2").click(function() {
-                        var catalogs = nm.get_catalogs();
-                        var tables = catalogs[2].get_tables();
-                        var layout = tables[0].get_layout();
-                        var result_obj = tables[0].search("a");
-
-                        var results = result_obj.get();
-                    
-                        $(this).html(results[99].get_thumbnail_url());
-                    });
-                    
+                    });                    
 
                 }
                );
