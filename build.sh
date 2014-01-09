@@ -3,6 +3,8 @@
 JSDOC="jsdoc";
 CLOSURE_COMPILER="closure";
 
+grep -R TODO *
+
 rm -rf dist
 mkdir dist
 rm -rf doc
