@@ -21,7 +21,7 @@ NatMus.js provides a 'handle' for CIP.js that provides access to the collections
 
 Build instructions
 ==================
-Make sure you have [Google's Closure Compiler](https://developers.google.com/closure/compiler/), [Node.js](http://node.js) and [JSDoc](http://usejsdoc.org/) installed before proceeding.
+Make sure you have [Google's Closure Compiler](https://developers.google.com/closure/compiler/), [Node.js](http://nodejs.org/) and [JSDoc](http://usejsdoc.org/) installed before proceeding.
 
 1.  Clone this repository.
 2.  Review `build.sh` and change the path to `jsdoc.js` to one that matches your system.
