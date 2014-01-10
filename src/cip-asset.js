@@ -58,7 +58,7 @@ function CIPAsset(cip, fields, catalog) {
     
     /**
      * Returns a URL for a thumbnail image.
-     * @param {object} given_options - Option definitions for the thumbnails. You can define the following parameters: size, maxsize, rotate, format, quality. All of them are integers, except for format which is either 'png' or 'jpeg'. Moreover quality must be divisible by 90.
+     * @param {object} given_options - Option definitions for the thumbnails. You can define the following parameters: size, maxsize, rotate, format, quality. All of them are integers, except for format which is either 'png' or 'jpeg'. Moreover rotate must be divisible by 90.
      */
     this.get_thumbnail_url = function(given_options) {
         var option_string = "";
