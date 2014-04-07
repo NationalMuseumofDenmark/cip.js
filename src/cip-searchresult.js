@@ -18,7 +18,9 @@ function CIPSearchResult(cip, collection, catalog) {
      */
     this.get = function(num_rows) {
         var returnvalue = [];
-        var self = this;
+
+        // We need this hack because the success function is bound to the CIPClient
+        var self = this; 
 
         if (num_rows === undefined) {
             num_rows = 100;
