@@ -23,6 +23,6 @@ Make sure you have [Google's Closure Compiler](https://developers.google.com/clo
 
 
 ## Contact
-This project is primarily maintained by [@jchillerup](https://github.com/jchillerup) from [BIT BLUEPRINT](http://www.bitblueprint.com/) for the National Museum of Denmark.
+This project is primarily maintained by [@jchillerup](https://github.com/jchillerup) from [BIT BLUEPRINT](http://www.bitblueprint.com/) for [the National Museum of Denmark](http://digital.natmus.dk/).
 
 The BIT BLUEPRINT team is available by email or live by IRC on [#bitblueprint at irc.freenode.net](http://webchat.freenode.net/?channels=bitblueprint).
