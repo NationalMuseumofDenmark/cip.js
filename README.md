@@ -7,15 +7,14 @@ cip.js provides a convenient object-relation layer on top of the CIP infrastruct
 
 The library uses [qwest](https://github.com/pyrsmk/qwest) for keeping track of the AJAX connections. qwest is already included in cip.js and uses the MIT license.
 
-## Writing cip.js handles
+## Institution specific setups with cip.js handles
 
 For every institution which exposes a CIP to the internet, the cip.js library needs some institution-specific setup and a 'handle' for that particular setup.
 
-### NatMus.js
+### natmus.js
 If you are looking for one such institution-specific setup, [natmus.js](https://github.com/NationalMuseumofDenmark/natmus.js) provides a 'handle' for cip.js that allows access to the collections of the National Museum of Denmark.
 
-Build instructions
-==================
+## Build instructions
 Make sure you have [Google's Closure Compiler](https://developers.google.com/closure/compiler/), [Node.js](http://nodejs.org/) and [JSDoc](http://usejsdoc.org/) installed before proceeding.
 
 1.  Clone this repository.
@@ -23,8 +22,7 @@ Make sure you have [Google's Closure Compiler](https://developers.google.com/clo
 3.  Run `build.sh`.
 
 
-Contact
-=======
-This project is primarily maintained by [@jchillerup](https://github.com/jchillerup) for [BIT BLUEPRINT](http://www.bitblueprint.com/).
+## Contact
+This project is primarily maintained by [@jchillerup](https://github.com/jchillerup) from [BIT BLUEPRINT](http://www.bitblueprint.com/) for the National Museum of Denmark.
 
 The BIT BLUEPRINT team is available by email or live by IRC on [#bitblueprint at irc.freenode.net](http://webchat.freenode.net/?channels=bitblueprint).
