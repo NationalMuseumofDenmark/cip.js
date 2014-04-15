@@ -1,23 +1,18 @@
-This repository actually contains two separate projects which should probably be in two distinct repositories. One project is CIP.js, a library for communicating with CIP endpoints, as defined in [this](http://samlinger.natmus.dk/CIP/doc/index.html) document.
-
 As an app developer you probably don't want to clone this repository. Rather, you'd want a build of it, preferably one that includes the documentation too. However, since this project is still under active development no builds are available, so you would have to do it yourself anyway, see the section below on build instructions.
 
-CIP.js
-======
-Cumulus CIP is an asset management system used by a variety of (Danish?) institutions. CIP.js provides a convenient object-relation layer on top of the CIP infrastructure to make it easier to make various operations on the collections exposed by CIP. CIP.js is read-only (currently).
+# cip.js
+CIP is an interface web service to an asset management system, called Cumulus, which used by a variety of institutions. Read more about CIP and Cumulus on http://www.canto.com/what-we-offer/.
 
-For CIP-technical reasons, CIP.js requires some non-standard CIP setup and a 'handle' for that particular setup.
+cip.js provides a convenient object-relation layer on top of the CIP infrastructure to make it easier to make various operations on the collections exposed by CIP. cip.js does only supports read-only for the momemt.
 
-The library uses [qwest](https://github.com/pyrsmk/qwest) for keeping track of the AJAX connections. qwest is already included in CIP.js and uses the MIT license.
+The library uses [qwest](https://github.com/pyrsmk/qwest) for keeping track of the AJAX connections. qwest is already included in cip.js and uses the MIT license.
 
-Writing CIP.js handles
-----------------------
-TODO
+## Writing cip.js handles
 
-NatMus.js
-=========
-NatMus.js provides a 'handle' for CIP.js that provides access to the collections of the National Museum of Denmark.
+For every institution which exposes a CIP to the internet, the cip.js library needs some institution-specific setup and a 'handle' for that particular setup.
 
+### NatMus.js
+If you are looking for one such institution-specific setup, [natmus.js](https://github.com/NationalMuseumofDenmark/natmus.js) provides a 'handle' for cip.js that allows access to the collections of the National Museum of Denmark.
 
 Build instructions
 ==================
