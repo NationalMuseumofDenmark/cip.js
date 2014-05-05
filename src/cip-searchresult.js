@@ -5,6 +5,11 @@
  * @param {object} collection - An object consisting of the number of rows and collection ID of the available search results.
  * @param {CIPCatalog} catalog - The catalog 
  */
+
+if(typeof(require) != "undefined") {
+    cip_asset = require('./cip-asset.js');
+}
+
 function CIPSearchResult(cip, collection, catalog) {
     this.cip = cip;
     this.total_rows = collection.totalcount;
@@ -32,7 +37,7 @@ function CIPSearchResult(cip, collection, catalog) {
                             }, 
                             function(response) {
                                 for (var i = 0; i<response.items.length; i++) {
-                                    returnvalue.push(new CIPAsset(this, response.items[i], catalog));
+                                    returnvalue.push(new cip_asset.CIPAsset(this, response.items[i], catalog));
                                 }
                                 
                                 self.pointer += response.items.length;
@@ -42,4 +47,8 @@ function CIPSearchResult(cip, collection, catalog) {
         
         return returnvalue;
     };
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPSearchResult = CIPSearchResult;
 }

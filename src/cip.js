@@ -6,6 +6,11 @@
  * requests in a nice way. Qwest is released under an MIT license.
  */
 
+if(typeof(exports) != "require") {
+    request = require('request');
+    cip_catalog = require('./cip-catalog.js');
+    cip_searchresult = require('./cip-searchresult.js');
+}
 
 /**
  * A general-purpose client library for CIP endpoints. Implements session
@@ -13,6 +18,7 @@
  * @constructor
  * @param {string} config - A "handle" object defining various settings about the CIP endpoint.
  */
+
 function CIPClient(config) {
     this.config = config;
     this.jsessionid = null;
@@ -33,16 +39,16 @@ function CIPClient(config) {
      */
     this.ciprequest = function(name, options, success, error, async) {
         var self = this; // TODO: Fix this hack
-        
+
         if (async === undefined) {
             async = false;
         }
-        
+
         var queryStringObject = { 
             apiversion: 4,
             serveraddress: "localhost"
         };
-        
+
         if (options !== undefined) {
             for (var key in options) {
                 queryStringObject[key] = options[key];
@@ -52,29 +58,34 @@ function CIPClient(config) {
         if (this.jsessionid === null && name !== "session/open") {
             console.error("ERROR: No jsessionid");
         }
-        
+
         var jsessionid_container = this.jsessionid===null?"":";jsessionid=" + this.jsessionid;
-        
+
         if (typeof(success) === "function") {
             success = success.bind(this);
         }
-        
+
         if (typeof(error) === "function") {
             error = error.bind(this);
         }
 
-        return qwest.post(this.config.endpoint + name + jsessionid_container, 
-                          queryStringObject, 
-                          {async: async},
-                          function() {
-                              // Set XMLHTTP properties here
-                          })
-            .success(success || function(response) {
-                console.log(["default success", name, response]);
-            })
-            .error(error || function(response) {
-                console.log(["default error", name, response]);
-            });
+        var error = error;
+        var success = success;
+
+        return request.post(
+            {
+                url: this.config.endpoint + name + jsessionid_container,
+                method: 'POST',
+                form: queryStringObject
+            },
+            function(is_error, response, body) {
+                if(response.statusCode != 200) {
+                    error(response);
+                } else {
+                    success(response);
+                }
+            }
+        );
     };
     
     /**
@@ -91,15 +102,16 @@ function CIPClient(config) {
      */
     this.session_open = function(username, password, success, error) {
         var self = this; // TODO: fix this hack
-        
+
         this.ciprequest("session/open", {user: username, password: password}, 
                         function(response) {
                             if (response.jsessionid) {
                                 self.jsessionid = response.jsessionid;
                                 console.log("Connected to CIP: "+self.jsessionid);
-                                
                                 success(response);
                             } else {
+                                debugger;
+                                console.log("SessionID is missing!");
                                 // fail
                                 return;
                             }
@@ -142,7 +154,7 @@ function CIPClient(config) {
             this.cache.catalogs =  [];
             
             for (var i=0; i < response.catalogs.length; i++) {
-                this.cache.catalogs.push(new CIPCatalog(this, response.catalogs[i]));
+                this.cache.catalogs.push(new cip_catalog.CIPCatalog(this, response.catalogs[i]));
             }
             
             callback(this.cache.catalogs);
@@ -171,7 +183,7 @@ function CIPClient(config) {
             function(response) {
                 // The API returns a collection ID which we will then proceed to enumerate
                 var collection = response.collection;
-                callback(new CIPSearchResult(this, response, table.catalog));
+                callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
                 
             }
         );
@@ -198,7 +210,7 @@ function CIPClient(config) {
             function(response) {
                 // The API returns a collection ID which we will then proceed to enumerate
                 var collection = response.collection;
-                callback(new CIPSearchResult(this, response, table.catalog));
+                callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
                 
             }
         );
@@ -215,4 +227,8 @@ function CIPClient(config) {
             callback(response.version);
         });
     };
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPClient = CIPClient;
 }

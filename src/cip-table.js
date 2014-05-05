@@ -5,6 +5,7 @@
  * @param {CIPCatalog} catalog - The catalog to which the table belongs.
  * @param {string} name - The name of the table.
  */
+
 function CIPTable(cip, catalog, name) {
     this.cip = cip;
     this.catalog = catalog;
@@ -41,4 +42,8 @@ function CIPTable(cip, catalog, name) {
         cip.search(this, query, callback);
     };
 
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPTable = CIPTable;
 }

@@ -4,6 +4,11 @@
  * @param {CIPClient} cip - The CIP client taking care of session handling etc.
  * @param {object} options - An object as returned by the CIP describing the catalog.
  */
+
+if(typeof(require) != "undefined") {
+    cip_table = require('./cip-table.js');
+}
+
 function CIPCatalog(cip, options) {
     this.cip = cip;
     
@@ -30,11 +35,15 @@ function CIPCatalog(cip, options) {
                             }, 
                             function(response, cip) {
                                 for (var i = 0; i < response.tables.length; i++ ) {
-                                    returnvalue.push(new CIPTable(this, catalog, response.tables[i]));
+                                    returnvalue.push(new cip_table.CIPTable(this, catalog, response.tables[i]));
                                 }
                                 
                                 callback(returnvalue);
                             });
         
     };
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPCatalog = CIPCatalog;
 }
