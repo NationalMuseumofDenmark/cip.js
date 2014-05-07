@@ -1,6 +1,9 @@
 {
   "name": "cip.js",
   "version": "0.0.0",
-  "main": "src/cip.js"
+  "main": "src/cip.js",
+  "dependencies": {
+    "request": "^2.27.0"
+  }
 }
 
