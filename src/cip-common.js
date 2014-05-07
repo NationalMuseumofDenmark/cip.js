@@ -10,3 +10,5 @@ function assert(condition, message) {
         throw message || "Assertion failed.";
     }
 };
+
+exports.assert = assert;

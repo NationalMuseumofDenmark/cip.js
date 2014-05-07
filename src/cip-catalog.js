@@ -7,6 +7,7 @@
 
 if(typeof(require) != "undefined") {
     cip_table = require('./cip-table.js');
+    cip_common = require('./cip-common.js');
 }
 
 function CIPCatalog(cip, options) {
@@ -23,7 +24,7 @@ function CIPCatalog(cip, options) {
      * @param {function} callback The callback function.
      */
     this.get_tables = function(callback) {
-        assert(this.cip.is_connected());
+        cip_common.assert(this.cip.is_connected());
         var returnvalue = [];
         
         // We need to cache the catalog because the callback later binds this to the CIP client.
@@ -37,7 +38,7 @@ function CIPCatalog(cip, options) {
                                 for (var i = 0; i < response.tables.length; i++ ) {
                                     returnvalue.push(new cip_table.CIPTable(this, catalog, response.tables[i]));
                                 }
-                                
+
                                 callback(returnvalue);
                             });
         

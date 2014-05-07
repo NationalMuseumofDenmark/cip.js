@@ -6,11 +6,10 @@
  * requests in a nice way. Qwest is released under an MIT license.
  */
 
-if(typeof(exports) != "require") {
-    request = require('request');
-    cip_catalog = require('./cip-catalog.js');
-    cip_searchresult = require('./cip-searchresult.js');
-}
+request = require('request');
+cip_catalog = require('./cip-catalog.js');
+cip_searchresult = require('./cip-searchresult.js');
+cip_common = require('./cip-common.js');
 
 /**
  * A general-purpose client library for CIP endpoints. Implements session
@@ -80,9 +79,9 @@ function CIPClient(config) {
             },
             function(is_error, response, body) {
                 if(response.statusCode != 200) {
-                    error(response);
+                    error(JSON.parse(response.body));
                 } else {
-                    success(response);
+                    success(JSON.parse(response.body));
                 }
             }
         );
@@ -144,7 +143,8 @@ function CIPClient(config) {
      * @param {function} callback The callback
      */
     this.get_catalogs = function(callback) {
-        assert(this.is_connected());
+        debugger;
+        cip_common.assert(this.is_connected());
 
         if (this.cache.catalogs !== null) {
             callback(this.cache.catalogs);
@@ -169,9 +169,9 @@ function CIPClient(config) {
      * @param {string} query - The query to search for.
      */
     this.search = function(table, query, callback) {
-        assert(this.is_connected());        
-        assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
-        assert(query !== undefined && query !== "", "Must define a query");
+        cip_common.assert(this.is_connected());        
+        cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
+        cip_common.assert(query !== undefined && query !== "", "Must define a query");
         
         this.ciprequest(
             "metadata/search/"+table.catalog.alias, 
@@ -196,9 +196,9 @@ function CIPClient(config) {
      * @param {string} query - The query to search for.
      */
     this.criteriasearch = function(table, querystring, callback) {
-        assert(this.is_connected());        
-        assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
-        assert(query !== undefined && query !== "", "Must define a query");
+        cip_common.assert(this.is_connected());        
+        cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
+        cip_common.assert(querystring !== undefined && querystring !== "", "Must define a query");
         
         this.ciprequest(
             "metadata/search/"+table.catalog.alias, 
