@@ -21,14 +21,15 @@ function CIPTable(cip, catalog, name) {
     this.get_layout = function(callback) {
         assert(this.cip.is_connected());
         var returnvalue = null;
+        var cip = this.cip;
 
         this.cip.ciprequest("metadata/getlayout/"+this.cip.config.constants.layout_alias, {
             catalogname: this.catalog.name,
             table: this.name
         }, function(response) {
-            this.layout = returnvalue;
+            this.layout = response;
 
-            callback(this.layout);
+            callback(new CIPLayout(cip, this.layout.fields));
         }); 
         
     };
