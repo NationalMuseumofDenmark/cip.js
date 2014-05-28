@@ -79,7 +79,11 @@ function CIPClient(config) {
             },
             function(is_error, response, body) {
                 if(response.statusCode != 200) {
-                    error(JSON.parse(response.body));
+                    if(error === undefined) {
+                        console.log("No error function defined ignoring");
+                    } else {
+                        error(response.body);
+                    }
                 } else {
                     success(JSON.parse(response.body));
                 }
