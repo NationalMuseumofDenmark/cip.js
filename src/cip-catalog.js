@@ -43,6 +43,24 @@ function CIPCatalog(cip, options) {
                             });
         
     };
+
+    this.get_categories = function(id, callback) {
+        cip_common.assert(this.cip.is_connected());
+        var returnvalue = [];
+        
+        // We need to cache the catalog because the callback later binds this to the CIP client.
+        var catalog = this;
+
+        this.cip.ciprequest("metadata/getcategories/" + this.alias + "/categories", 
+                            {
+                                categoryid: id
+                            }, 
+                            function(response, cip) {
+                                callback(response);
+                            });
+        
+    };
+
 }
 
 if(typeof(exports) != "undefined") {
