@@ -44,7 +44,7 @@ function CIPCatalog(cip, options) {
         
     };
 
-    this.get_categories = function(id, callback) {
+    this.get_categories = function(id, levels, callback) {
         cip_common.assert(this.cip.is_connected());
         var returnvalue = [];
         
@@ -53,7 +53,8 @@ function CIPCatalog(cip, options) {
 
         this.cip.ciprequest("metadata/getcategories/" + this.alias + "/categories", 
                             {
-                                categoryid: id
+                                categoryid: id,
+                                levels: levels
                             }, 
                             function(response, cip) {
                                 callback(response);
