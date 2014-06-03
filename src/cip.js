@@ -80,7 +80,8 @@ function CIPClient(config) {
             function(is_error, response, body) {
                 if(response.statusCode != 200) {
                     if(error === undefined) {
-                        console.log("No error function defined ignoring");
+                        console.log("No error function defined, calling success(null) :(");
+                        success(null);
                     } else {
                         error(response.body);
                     }
@@ -147,7 +148,6 @@ function CIPClient(config) {
      * @param {function} callback The callback
      */
     this.get_catalogs = function(callback) {
-        debugger;
         cip_common.assert(this.is_connected());
 
         if (this.cache.catalogs !== null) {
@@ -203,7 +203,7 @@ function CIPClient(config) {
         cip_common.assert(this.is_connected());        
         cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
         cip_common.assert(querystring !== undefined && querystring !== "", "Must define a query");
-        
+
         this.ciprequest(
             "metadata/search/"+table.catalog.alias, 
             {
@@ -215,7 +215,6 @@ function CIPClient(config) {
                 // The API returns a collection ID which we will then proceed to enumerate
                 var collection = response.collection;
                 callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
-                
             }
         );
     };
