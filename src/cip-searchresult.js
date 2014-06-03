@@ -14,6 +14,7 @@ function CIPSearchResult(cip, collection, catalog) {
     this.cip = cip;
     this.total_rows = collection.totalcount;
     this.collection_id = collection.collection;
+    this.catalog = catalog;
 
     /**
      * Gets a specified number of search results, conveniently formatted as 
