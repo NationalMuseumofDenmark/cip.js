@@ -156,9 +156,13 @@ function CIPClient(config) {
 
         this.ciprequest("metadata/getcatalogs", {}, function(response) {
             this.cache.catalogs =  [];
+            var aliases = this.config['catalog_aliases'];
             
             for (var i=0; i < response.catalogs.length; i++) {
-                this.cache.catalogs.push(new cip_catalog.CIPCatalog(this, response.catalogs[i]));
+                var catobj = response.catalogs[i];
+                if ((catobj.name in aliases))  {
+                    this.cache.catalogs.push(new cip_catalog.CIPCatalog(this, response.catalogs[i]));
+                }
             }
             
             callback(this.cache.catalogs);
