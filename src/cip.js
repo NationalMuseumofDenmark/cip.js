@@ -156,6 +156,7 @@ function CIPClient(config) {
 		var error = error;
 		var success = success;
 
+        if(typeof(require) != "undefined" && request) {
 		// We are using post calls, so the named parameters go to the body.
 		named_parameters = this.named_parameters_with_defaults(named_parameters);
 
@@ -190,6 +191,14 @@ function CIPClient(config) {
 				{ async: async }
 			).success(success).error(error);
 		}
+                })
+                .success(success || function(response) {
+                    console.log(["default success", name, response]);
+                })
+                .error(error || function(response) {
+                    console.log(["default error", name, response]);
+                });
+        }
 	};
 	
 	/**

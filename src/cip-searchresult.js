@@ -39,15 +39,14 @@ function CIPSearchResult(cip, collection, catalog) {
                 maxreturned: num_rows
             },
             function(response) {
-                                if(response == null) {
-                                    success(null);
-                                }
-                                else {
-                                    for (var i = 0; i<response.items.length; i++) {
-                                        returnvalue.push(new cip_asset.CIPAsset(this, response.items[i], catalog));
-                                    }
-                                    success(returnvalue);
-                                }
+                if(response == null) {
+                    success(null);
+                } else {
+		            for (var i = 0; i<response.items.length; i++) {
+		                returnvalue.push(new cip_asset.CIPAsset(this, response.items[i], catalog));
+		            }
+		            success(returnvalue);
+				}
             });
 
     };

@@ -11,6 +11,7 @@ function assert(condition, message) {
     }
 };
 
+
 if(typeof(exports) != "undefined") {
 	exports.assert = assert;
 } else {
