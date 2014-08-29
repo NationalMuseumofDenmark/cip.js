@@ -5,6 +5,12 @@
  * @param {CIPCatalog} catalog - The catalog to which the table belongs.
  * @param {string} name - The name of the table.
  */
+
+if(typeof(exports) != "require") {
+    cip_common = require('./cip-common.js');
+}
+
+
 function CIPTable(cip, catalog, name) {
     this.cip = cip;
     this.catalog = catalog;
@@ -19,7 +25,7 @@ function CIPTable(cip, catalog, name) {
      * @param {function} callback The callback.
      */
     this.get_layout = function(callback) {
-        assert(this.cip.is_connected());
+        cip_common.assert(this.cip.is_connected());
         var returnvalue = null;
         var cip = this.cip;
 
@@ -39,7 +45,14 @@ function CIPTable(cip, catalog, name) {
      * @param {string} query - The query to search for.
      */
     this.search = function(query, callback) {
-        cip.search(this, query, callback);
+        this.cip.search(this, query, callback);
     };
 
+    this.criteriasearch = function(querystring, callback) {
+        this.cip.criteriasearch(this, querystring, callback);
+    };
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPTable = CIPTable;
 }

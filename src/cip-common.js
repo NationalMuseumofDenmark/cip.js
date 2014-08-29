@@ -1,3 +1,6 @@
+if(typeof(window) == "undefined") {
+  window = {};
+}
 // Shim to avoid failures on browsers without console.
 window.console = window.console || {log: function() {}, error: function() {}};
 
@@ -7,3 +10,5 @@ function assert(condition, message) {
         throw message || "Assertion failed.";
     }
 };
+
+exports.assert = assert;

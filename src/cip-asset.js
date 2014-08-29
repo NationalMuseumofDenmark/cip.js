@@ -5,6 +5,7 @@
  * @param {object} fields - The asset fields
  * @param {CIPCatalog} catalog - The catalog to which the asset belongs
  */ 
+
 function CIPAsset(cip, fields, catalog) {
     this.cip = cip;
     this.fields = fields;
@@ -87,4 +88,8 @@ function CIPAsset(cip, fields, catalog) {
         
         return this.cip.config.endpoint + "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id + "?" + option_string;
     };
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPAsset = CIPAsset;
 }

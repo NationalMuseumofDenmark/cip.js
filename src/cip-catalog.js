@@ -4,6 +4,12 @@
  * @param {CIPClient} cip - The CIP client taking care of session handling etc.
  * @param {object} options - An object as returned by the CIP describing the catalog.
  */
+
+if(typeof(require) != "undefined") {
+    cip_table = require('./cip-table.js');
+    cip_common = require('./cip-common.js');
+}
+
 function CIPCatalog(cip, options) {
     this.cip = cip;
     
@@ -18,7 +24,7 @@ function CIPCatalog(cip, options) {
      * @param {function} callback The callback function.
      */
     this.get_tables = function(callback) {
-        assert(this.cip.is_connected());
+        cip_common.assert(this.cip.is_connected());
         var returnvalue = [];
         
         // We need to cache the catalog because the callback later binds this to the CIP client.
@@ -30,11 +36,34 @@ function CIPCatalog(cip, options) {
                             }, 
                             function(response, cip) {
                                 for (var i = 0; i < response.tables.length; i++ ) {
-                                    returnvalue.push(new CIPTable(this, catalog, response.tables[i]));
+                                    returnvalue.push(new cip_table.CIPTable(this, catalog, response.tables[i]));
                                 }
-                                
+
                                 callback(returnvalue);
                             });
         
     };
+
+    this.get_categories = function(id, levels, callback) {
+        cip_common.assert(this.cip.is_connected());
+        var returnvalue = [];
+        
+        // We need to cache the catalog because the callback later binds this to the CIP client.
+        var catalog = this;
+
+        this.cip.ciprequest("metadata/getcategories/" + this.alias + "/categories", 
+                            {
+                                categoryid: id,
+                                levels: levels
+                            }, 
+                            function(response, cip) {
+                                callback(response);
+                            });
+        
+    };
+
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPCatalog = CIPCatalog;
 }

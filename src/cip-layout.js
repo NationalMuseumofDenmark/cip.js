@@ -30,3 +30,7 @@ function CIPLayout(cip, fields) {
         return undefined;
     };
 }
+
+if(typeof(exports) != "undefined") {
+    exports.CIPLayout = CIPLayout;
+}
