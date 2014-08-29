@@ -256,17 +256,21 @@ function CIPClient(config) {
 		}
 
 		this.ciprequest("metadata/getcatalogs", {}, function(response) {
-			this.cache.catalogs =  [];
-			var aliases = this.config['catalog_aliases'];
+			if(response == null) {
+				callback(null);
+			} else {
+				this.cache.catalogs =  [];
+				var aliases = this.config['catalog_aliases'];
 			
-			for (var i=0; i < response.catalogs.length; i++) {
-				var catobj = response.catalogs[i];
-				if ((catobj.name in aliases))  {
-					var catalog = new cip_catalog.CIPCatalog(this, response.catalogs[i]);
-					this.cache.catalogs.push(catalog);
+				for (var i=0; i < response.catalogs.length; i++) {
+					var catobj = response.catalogs[i];
+					if ((catobj.name in aliases))  {
+						var catalog = new cip_catalog.CIPCatalog(this, response.catalogs[i]);
+						this.cache.catalogs.push(catalog);
+					}
 				}
+				callback(this.cache.catalogs);
 			}
-			callback(this.cache.catalogs);
 		}, error_callback);
 		
 	};
@@ -280,6 +284,12 @@ function CIPClient(config) {
 	 */
 	this.search = function(table, query, callback, error_callback) {
 		return this.advancedsearch(table, undefined, query, undefined, callback, error_callback);
+                if(response === null) {
+                    callback(null);
+                } else {
+                    var collection = response.collection;
+                    callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
+                }
 	};
 	
 	/**
@@ -316,7 +326,11 @@ function CIPClient(config) {
 				table: table.name,
 				collection: ""  // We pass an empty collection to get the system to create one for us and return the name
 			}, function(response) {
-				callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
+				if(response === null) {
+					callback(null);
+				} else {
+					callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
+				}
 			}, error_callback
 		);
 	};
