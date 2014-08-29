@@ -17,7 +17,9 @@ function CIPCatalog(cip, options) {
         this[key] = options[key];
     }
 
-    this.alias = cip.config.catalog_aliases[this.name];
+    if(this.alias === undefined) {
+        this.alias = cip.config.catalog_aliases[this.name];
+    }
     
     /**
      * Returns a list of tables in the catalog.

@@ -222,9 +222,9 @@ function CIPClient(config) {
     
     /**
      * Performs a metadata search in the CIP given as a query string. Called from higher-level classes.
-     * @param {object} catalog - The catalog to search in, as returned by NatMus#get_catalogs.
      * @param {object} table - The table to search in, as returned by NatMus#get_tables.
      * @param {string} query - The query to search for.
+     * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPSearchResult.
      */
     this.criteriasearch = function(table, querystring, callback) {
         cip_common.assert(this.is_connected());        
@@ -246,7 +246,45 @@ function CIPClient(config) {
         );
     };
     
+    /**
+     * Gives a reference to a CIPAsset with or without its metadata.
+     * @param {string} catalog_alias - The catalog alias from with to fetch the asset.
+     * @param {number} asset_id - The ID of the asset as known in Cumulus.
+     * @param {boolean} fetch_metadata - Should the CIPAsset have it's metadata populated?
+     * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPAsset.
+     */
+    this.get_asset = function(catalog_alias, asset_id, fetch_metadata, callback) {
+        assert(this.is_connected());
+        assert(catalog_alias !== undefined, "Catalog must have an alias.");
+        assert(asset_id !== undefined, "The asset_id must have a value.");
+
+        console.log("get_asset after assets ..");
+
+        var catalog = new CIPCatalog(this, { alias: catalog_alias });
         
+        if(fetch_metadata === true) {
+            console.log("fetch_metadata was true ..");
+            var table = new CIPTable(this, catalog, "AssetRecords");
+            console.log(catalog, table);
+
+            this.criteriasearch(table, 'id == ' + asset_id, function(result) {
+                console.log("criteriasearch returned result ..", result);
+                // Found a result - get the actual asset.
+                // result.get(1, 0, function(assets) {
+                var assets = result.get(1);
+                if(assets.length !== 1) {
+                    log.warning( "The criteriasearch didn't return exactly one result. Check parameters." );
+                    callback( null );
+                } else {
+                    var asset = assets[0];
+                    callback( asset );
+                };
+            });
+        } else {
+            var asset = new CIPAsset(this, { id: asset_id }, catalog);
+            callback( asset );
+        }
+    };
     
     /**
      * Gets the version of the various services on the CIP stack.
