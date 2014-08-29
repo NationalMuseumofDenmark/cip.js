@@ -270,15 +270,15 @@ function CIPClient(config) {
             this.criteriasearch(table, 'id == ' + asset_id, function(result) {
                 console.log("criteriasearch returned result ..", result);
                 // Found a result - get the actual asset.
-                // result.get(1, 0, function(assets) {
-                var assets = result.get(1);
-                if(assets.length !== 1) {
-                    log.warning( "The criteriasearch didn't return exactly one result. Check parameters." );
-                    callback( null );
-                } else {
-                    var asset = assets[0];
-                    callback( asset );
-                };
+                result.get(1, 0, function(assets) {
+                    if(assets.length !== 1) {
+                        log.warning( "The criteriasearch didn't return exactly one result. Check parameters." );
+                        callback( null );
+                    } else {
+                        var asset = assets[0];
+                        callback( asset );
+                    };
+                });
             });
         } else {
             var asset = new CIPAsset(this, { id: asset_id }, catalog);
