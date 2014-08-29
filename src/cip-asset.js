@@ -92,4 +92,8 @@ function CIPAsset(cip, fields, catalog) {
 
 if(typeof(exports) != "undefined") {
     exports.CIPAsset = CIPAsset;
+} else {
+    window.cip_asset = {
+        CIPAsset: CIPAsset
+    }
 }

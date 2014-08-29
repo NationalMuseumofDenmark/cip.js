@@ -6,10 +6,12 @@
  * requests in a nice way. Qwest is released under an MIT license.
  */
 
-request = require('request');
-cip_catalog = require('./cip-catalog.js');
-cip_searchresult = require('./cip-searchresult.js');
-cip_common = require('./cip-common.js');
+if(typeof(require) != "undefined") {
+    request = require('request');
+    cip_catalog = require('./cip-catalog.js');
+    cip_searchresult = require('./cip-searchresult.js');
+    cip_common = require('./cip-common.js');
+}
 
 /**
  * A general-purpose client library for CIP endpoints. Implements session
@@ -23,6 +25,9 @@ function CIPClient(config) {
     this.jsessionid = null;
     this.DEBUG = true;
     
+    cip_common.assert(config !== undefined, "The CIPClient must be passed a config object.");
+    cip_common.assert(config.endpoint !== undefined, "The config must have an endpoint property.");
+
     this.cache = {
         catalogs: null
     };
@@ -71,25 +76,41 @@ function CIPClient(config) {
         var error = error;
         var success = success;
 
-        return request.post(
-            {
-                url: this.config.endpoint + name + jsessionid_container,
-                method: 'POST',
-                form: queryStringObject
-            },
-            function(is_error, response, body) {
-                if(response.statusCode != 200) {
-                    if(error === undefined) {
-                        console.log("No error function defined, calling success(null) :(");
-                        success(null);
+        if(typeof(require) != "undefined" && request) {
+            return request.post(
+                {
+                    url: this.config.endpoint + name + jsessionid_container,
+                    method: 'POST',
+                    form: queryStringObject
+                },
+                function(is_error, response, body) {
+                    if(response.statusCode != 200) {
+                        if(error === undefined) {
+                            console.log("No error function defined, calling success(null) :(");
+                            success(null);
+                        } else {
+                            error(response.body);
+                        }
                     } else {
-                        error(response.body);
+                        success(JSON.parse(response.body));
                     }
-                } else {
-                    success(JSON.parse(response.body));
                 }
-            }
-        );
+            );
+        } else if ( qwest && typeof(qwest) === 'object' ) {
+            return qwest.post(
+                this.config.endpoint + name + jsessionid_container, 
+                queryStringObject, 
+                { async: async },
+                function() {
+                  // Set XMLHTTP properties here
+                })
+                .success(success || function(response) {
+                    console.log(["default success", name, response]);
+                })
+                .error(error || function(response) {
+                    console.log(["default error", name, response]);
+                });
+        }
     };
     
     /**
@@ -107,23 +128,25 @@ function CIPClient(config) {
     this.session_open = function(username, password, success, error) {
         var self = this; // TODO: fix this hack
 
-        this.ciprequest("session/open", {user: username, password: password}, 
-                        function(response) {
-                            if (response.jsessionid) {
-                                self.jsessionid = response.jsessionid;
-                                console.log("Connected to CIP: "+self.jsessionid);
-                                success(response);
-                            } else {
-                                debugger;
-                                console.log("SessionID is missing!");
-                                // fail
-                                return;
-                            }
-                        },
-                        function(response) {
-                            error(response) || console.error("Could not make request to CIP.");
-                        },
-                        true);
+        this.ciprequest("session/open", {
+            user: username,
+            password: password
+        }, function(response) {
+            if (response.jsessionid) {
+                self.jsessionid = response.jsessionid;
+                console.log("Connected to CIP: "+self.jsessionid);
+                success(response);
+            } else {
+                debugger;
+                console.log("SessionID is missing!");
+                // fail
+                return;
+            }
+        },
+        function(response) {
+            (error && error(response)) || console.error("Could not make request to CIP.");
+        },
+        true);
 
     };
     
@@ -161,10 +184,10 @@ function CIPClient(config) {
             for (var i=0; i < response.catalogs.length; i++) {
                 var catobj = response.catalogs[i];
                 if ((catobj.name in aliases))  {
-                    this.cache.catalogs.push(new cip_catalog.CIPCatalog(this, response.catalogs[i]));
+                    var catalog = new cip_catalog.CIPCatalog(this, response.catalogs[i]);
+                    this.cache.catalogs.push(catalog);
                 }
             }
-            
             callback(this.cache.catalogs);
         });
         
@@ -230,6 +253,7 @@ function CIPClient(config) {
      * @return object
      */
     this.get_version = function(callback) {
+        cip_common.assert(typeof(callback) === "function", "The callback must be a function.");
         this.ciprequest("system/getversion", {}, function(response) {
             callback(response.version);
         });

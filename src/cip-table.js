@@ -6,7 +6,7 @@
  * @param {string} name - The name of the table.
  */
 
-if(typeof(exports) != "require") {
+if(typeof(require) != "undefined") {
     cip_common = require('./cip-common.js');
 }
 
@@ -55,4 +55,8 @@ function CIPTable(cip, catalog, name) {
 
 if(typeof(exports) != "undefined") {
     exports.CIPTable = CIPTable;
+} else {
+    window.cip_table = {
+        CIPTable: CIPTable
+    };
 }

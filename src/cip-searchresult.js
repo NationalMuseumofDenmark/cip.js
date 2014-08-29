@@ -31,24 +31,27 @@ function CIPSearchResult(cip, collection, catalog) {
             num_rows = 100;
         }
 
-        this.cip.ciprequest("metadata/getfieldvalues/web", 
-                            {
-                                collection: this.collection_id,
-                                startindex: pointer,
-                                maxreturned: num_rows
-                            }, 
-                            function(response) {
-                                debugger;
-                                for (var i = 0; i<response.items.length; i++) {
-                                    returnvalue.push(new cip_asset.CIPAsset(this, response.items[i], catalog));
-                                }
-
-                                success(returnvalue);
-                            });
+        this.cip.ciprequest(
+            "metadata/getfieldvalues/web", 
+            {
+                collection: this.collection_id,
+                startindex: pointer,
+                maxreturned: num_rows
+            },
+            function(response) {
+                for (var i = 0; i<response.items.length; i++) {
+                    returnvalue.push(new cip_asset.CIPAsset(this, response.items[i], catalog));
+                }
+                success(returnvalue);
+            });
 
     };
 }
 
 if(typeof(exports) != "undefined") {
     exports.CIPSearchResult = CIPSearchResult;
+} else {
+    window.cip_searchresult = {
+        CIPSearchResult: CIPSearchResult
+    };
 }

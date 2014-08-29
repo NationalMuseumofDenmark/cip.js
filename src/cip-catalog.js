@@ -66,4 +66,8 @@ function CIPCatalog(cip, options) {
 
 if(typeof(exports) != "undefined") {
     exports.CIPCatalog = CIPCatalog;
+} else {
+    window.cip_catalog = {
+        CIPCatalog: CIPCatalog
+    };
 }
