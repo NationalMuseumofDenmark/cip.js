@@ -260,11 +260,11 @@ function CIPClient(config) {
 
         console.log("get_asset after assets ..");
 
-        var catalog = new CIPCatalog(this, { alias: catalog_alias });
+        var catalog = new cip_catalog.CIPCatalog(this, { alias: catalog_alias });
         
         if(fetch_metadata === true) {
             console.log("fetch_metadata was true ..");
-            var table = new CIPTable(this, catalog, "AssetRecords");
+            var table = new cip_table.CIPTable(this, catalog, "AssetRecords");
             console.log(catalog, table);
 
             this.criteriasearch(table, 'id == ' + asset_id, function(result) {
@@ -281,7 +281,7 @@ function CIPClient(config) {
                 });
             });
         } else {
-            var asset = new CIPAsset(this, { id: asset_id }, catalog);
+            var asset = new cip_asset.CIPAsset(this, { id: asset_id }, catalog);
             callback( asset );
         }
     };
