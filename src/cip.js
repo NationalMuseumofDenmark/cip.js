@@ -166,7 +166,7 @@ function CIPClient(config) {
 				{
 					url: url,
 					method: 'POST',
-					form: named_parameters
+					form: named_parameters,
 					timeout: 0
 				},
 				function(is_error, response, body) {
