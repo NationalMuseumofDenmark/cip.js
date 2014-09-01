@@ -37,11 +37,16 @@ function CIPCatalog(cip, options) {
                                 catalogname: this.name
                             }, 
                             function(response, cip) {
-                                for (var i = 0; i < response.tables.length; i++ ) {
-                                    returnvalue.push(new cip_table.CIPTable(this, catalog, response.tables[i]));
-                                }
+                                if(response == null) {
+                                    for (var i = 0; i < response.tables.length; i++ ) {
+                                        returnvalue.push(new cip_table.CIPTable(this, catalog, response.tables[i]));
+                                    }
 
-                                callback(returnvalue);
+                                    callback(returnvalue);
+                                }
+                                else {
+                                    callback(null);
+                                }
                             });
         
     };
@@ -59,7 +64,11 @@ function CIPCatalog(cip, options) {
                                 levels: levels
                             }, 
                             function(response, cip) {
-                                callback(response);
+                                if(response == null) {
+                                    callback(null);
+                                } else {
+                                    callback(response);
+                                }
                             });
         
     };

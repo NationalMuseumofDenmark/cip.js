@@ -167,7 +167,7 @@ function CIPClient(config) {
 					url: url,
 					method: 'POST',
 					form: named_parameters
-					timeout: 10000
+					timeout: 0
 				},
 				function(is_error, response, body) {
 					if(response == null || response == undefined) {
