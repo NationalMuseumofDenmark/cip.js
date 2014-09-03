@@ -334,7 +334,7 @@ function CIPClient(config) {
         if(fetch_metadata === true) {
             var table = new cip_table.CIPTable(this, catalog, "AssetRecords");
 
-            this.criteriasearch(table, 'id == ' + asset_id, function(result) {
+            this.criteriasearch(table, 'id == ' + asset_id, null, function(result) {
                 // Found a result - get the actual asset.
                 result.get(1, 0, function(assets) {
                     if(assets.length !== 1) {
