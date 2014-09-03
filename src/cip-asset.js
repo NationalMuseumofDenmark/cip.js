@@ -53,17 +53,22 @@ function CIPAsset(cip, fields, catalog) {
     /**
      * Returns a URL for a full-size preview of the asset.
      */
-    this.get_preview_url = function()  {
-        return this.cip.config.endpoint + "preview/image/"+ catalog.alias +"/" + this.fields.id;
+    this.get_preview_url = function(include_jsessionid)  {
+        var before_querystring = "";
+        if(include_jsession === true) {
+            before_querystring = ";jsessionid=" + this.cip.jsessionid;
+        }
+        return this.cip.config.endpoint + "preview/image/"+ catalog.alias +"/" + this.fields.id + before_querystring;
     };
     
     /**
      * Returns a URL for a thumbnail image.
      * @param {object} given_options - Option definitions for the thumbnails. You can define the following parameters: size, maxsize, rotate, format, quality. All of them are integers, except for format which is either 'png' or 'jpeg'. Moreover rotate must be divisible by 90.
      */
-    this.get_thumbnail_url = function(given_options) {
+    this.get_thumbnail_url = function(given_options, include_jsessionid) {
         var option_string = "";
         var ampersand = "";
+        var before_querystring = "";
         var options = {};
         var allowed_attributes = ["size", "maxsize", "rotate", "format", "quality"];
         
@@ -85,8 +90,12 @@ function CIPAsset(cip, fields, catalog) {
             
             ampersand = "&";
         }
+
+        if(include_jsession === true) {
+            before_querystring = ";jsessionid=" + this.cip.jsessionid;
+        }
         
-        return this.cip.config.endpoint + "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id + "?" + option_string;
+        return this.cip.config.endpoint + "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id + before_querystring + "?" + option_string;
     };
 }
 
