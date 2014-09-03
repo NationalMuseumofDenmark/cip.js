@@ -293,7 +293,7 @@ function CIPClient(config) {
      * @param {string} query - The query to search for.
      * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPSearchResult.
      */
-    this.criteriasearch = function(table, querystring, callback, error_callback) {
+    this.criteriasearch = function(table, querystring, sortby, callback, error_callback) {
 
         cip_common.assert(this.is_connected());        
         cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
@@ -303,6 +303,7 @@ function CIPClient(config) {
             "metadata/search/"+table.catalog.alias, 
             {
                 querystring: querystring,
+                sortby: sortby,
                 table: table.name,
                 collection: ""  // We pass an empty collection to get the system to create one for us and return the name
             }, 
