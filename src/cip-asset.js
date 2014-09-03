@@ -36,7 +36,7 @@ function CIPAsset(cip, fields, catalog) {
         }
         return this.cip.generate_url(
             "asset/download/"+ catalog.alias +"/" + this.fields.id,
-            named_parameters,
+            named_parameters
         );
     };
     
@@ -75,7 +75,7 @@ function CIPAsset(cip, fields, catalog) {
         if (given_named_parameters !== undefined) {
             given_named_parameters = {};
         }
-        
+
         for (var i in allowed_attributes) {
             if (given_named_parameters[allowed_attributes[i]] !== undefined) {
                 if (allowed_attributes[i] !== "format") {
@@ -88,7 +88,7 @@ function CIPAsset(cip, fields, catalog) {
 
         return this.cip.generate_url(
             "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id,
-            named_parameters,
+            named_parameters
         );
     };
 }
