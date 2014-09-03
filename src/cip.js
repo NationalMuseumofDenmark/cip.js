@@ -58,6 +58,7 @@ function CIPClient(config) {
         for(var p in named_parameters) {
             result[p] = named_parameters[p];
         }
+        return result;
     }
 
     /** 
@@ -89,7 +90,7 @@ function CIPClient(config) {
             if(query_string.length > 0) {
                 query_string += "&";
             }
-            query_string += p + ":" + named_parameters[p];
+            query_string += p + "=" + named_parameters[p];
         }
 
         // Prepend the question mark if a query exists.
@@ -147,6 +148,7 @@ function CIPClient(config) {
 
         // We are using post calls, so the named parameters go to the body.
         named_parameters = this.named_parameters_with_defaults(named_parameters);
+        console.log(named_parameters);
 
         var url = this.generate_url( operation, false );
 
