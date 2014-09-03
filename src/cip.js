@@ -124,7 +124,6 @@ function CIPClient(config) {
 		if (async === undefined) {
 			async = false;
 		}
-
 		if (this.jsessionid === null && operation !== "session/open") {
 			console.warn("No jsessionid - consider calling session_open before calling other action.");
 		}
@@ -155,6 +154,11 @@ function CIPClient(config) {
 		// TODO: Consider if this has any effect.
 		var error = error;
 		var success = success;
+
+        // We are using post calls, so the named parameters go to the body.
+        named_parameters = this.named_parameters_with_defaults(named_parameters);
+
+        var url = this.generate_url( operation, false );
 
         if(typeof(require) != "undefined" && request) {
 		// We are using post calls, so the named parameters go to the body.
@@ -189,16 +193,12 @@ function CIPClient(config) {
 				url,
 				named_parameters,
 				{ async: async }
-			).success(success).error(error);
+			).success(success || function(response) {
+				console.log(["default success", name, response]);
+			}).error(error || function(response) {
+				console.log(["default error", name, response]);
+			});
 		}
-                })
-                .success(success || function(response) {
-                    console.log(["default success", name, response]);
-                })
-                .error(error || function(response) {
-                    console.log(["default error", name, response]);
-                });
-        }
 	};
 	
 	/**

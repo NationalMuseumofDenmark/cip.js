@@ -68,7 +68,7 @@ function CIPAsset(cip, fields, catalog) {
      * Returns a URL for a thumbnail image.
      * @param {object} given_named_parameters - Option definitions for the thumbnails. You can define the following parameters: size, maxsize, rotate, format, quality. All of them are integers, except for format which is either 'png' or 'jpeg'. Moreover rotate must be divisible by 90.
      */
-    this.get_thumbnail_url = function(given_named_parameters) {
+    this.get_thumbnail_url = function(given_named_parameters, include_jsessionid) {
         var option_string = "";
         var ampersand = "";
         var before_querystring = "";
@@ -79,7 +79,7 @@ function CIPAsset(cip, fields, catalog) {
         if (given_named_parameters === undefined) {
             given_named_parameters = {};
         }
-
+        
         for (var i in allowed_attributes) {
             if (given_named_parameters[allowed_attributes[i]] !== undefined) {
                 if (allowed_attributes[i] !== "format") {
@@ -88,8 +88,6 @@ function CIPAsset(cip, fields, catalog) {
                     named_parameters[allowed_attributes[i]] = given_named_parameters[allowed_attributes[i]];
                 }
             }
-        }
-
         return this.cip.generate_url(
             "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id,
             named_parameters
