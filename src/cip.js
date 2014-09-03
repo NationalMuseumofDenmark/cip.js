@@ -148,7 +148,6 @@ function CIPClient(config) {
 
         // We are using post calls, so the named parameters go to the body.
         named_parameters = this.named_parameters_with_defaults(named_parameters);
-        console.log(named_parameters);
 
         var url = this.generate_url( operation, false );
 
