@@ -43,22 +43,26 @@ function CIPClient(config) {
      * @param {object}|{false} named_parameters - The parameters for the
      *        query string, false if they should be leaved out.
      */
-    this.named_parameters_with_defaults = function( named_parameters ) {
-        // We start with the default named parameters.
-        var result = this.default_named_parameters;
+    this.named_parameters_with_defaults = function( given_named_parameters ) {
+        var named_parameters = {};
+
+        // We start with the default named parameters
+        for(var p in this.default_named_parameters) {
+            named_parameters[p] = this.default_named_parameters[p];
+        }
 
         // Did we get any named parameters?
-        if(typeof(named_parameters) === "undefined" || named_parameters === null) {
-            named_parameters = {};
-        } else if(typeof(named_parameters) !== "object") {
+        if(typeof(given_named_parameters) === "undefined" || given_named_parameters === null) {
+            given_named_parameters = {};
+        } else if(typeof(given_named_parameters) !== "object") {
             throw "The named_parameters parameter must be an object, undefined or null.";
         }
 
         // Overwrite default named parameters.
-        for(var p in named_parameters) {
-            result[p] = named_parameters[p];
+        for(var p in given_named_parameters) {
+            named_parameters[p] = given_named_parameters[p];
         }
-        return result;
+        return named_parameters;
     }
 
     /** 
