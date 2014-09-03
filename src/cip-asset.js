@@ -72,7 +72,7 @@ function CIPAsset(cip, fields, catalog) {
         var allowed_attributes = ["size", "maxsize", "rotate", "format", "quality"];
         
         // Ensure that only the given named_parameters are added to the query string
-        if (given_named_parameters !== undefined) {
+        if (given_named_parameters === undefined) {
             given_named_parameters = {};
         }
 
