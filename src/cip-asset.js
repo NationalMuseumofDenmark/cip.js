@@ -55,7 +55,7 @@ function CIPAsset(cip, fields, catalog) {
      */
     this.get_preview_url = function(include_jsessionid)  {
         var before_querystring = "";
-        if(include_jsession === true) {
+        if(include_jsessionid === true) {
             before_querystring = ";jsessionid=" + this.cip.jsessionid;
         }
         return this.cip.config.endpoint + "preview/image/"+ catalog.alias +"/" + this.fields.id + before_querystring;
@@ -91,7 +91,7 @@ function CIPAsset(cip, fields, catalog) {
             ampersand = "&";
         }
 
-        if(include_jsession === true) {
+        if(include_jsessionid === true) {
             before_querystring = ";jsessionid=" + this.cip.jsessionid;
         }
         
