@@ -293,7 +293,8 @@ function CIPClient(config) {
      * @param {string} query - The query to search for.
      * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPSearchResult.
      */
-    this.criteriasearch = function(table, querystring, callback) {
+    this.criteriasearch = function(table, querystring, callback, error_callback) {
+
         cip_common.assert(this.is_connected());        
         cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
         cip_common.assert(querystring !== undefined && querystring !== "", "Must define a query");
@@ -309,7 +310,8 @@ function CIPClient(config) {
                 // The API returns a collection ID which we will then proceed to enumerate
                 var collection = response.collection;
                 callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
-            }
+            },
+            error_callback
         );
     };
     
@@ -319,34 +321,30 @@ function CIPClient(config) {
      * @param {number} asset_id - The ID of the asset as known in Cumulus.
      * @param {boolean} fetch_metadata - Should the CIPAsset have it's metadata populated?
      * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPAsset.
+     * @param {function} callback - The callback function called if something goes wrong.
      */
-    this.get_asset = function(catalog_alias, asset_id, fetch_metadata, callback) {
-        assert(this.is_connected());
-        assert(catalog_alias !== undefined, "Catalog must have an alias.");
-        assert(asset_id !== undefined, "The asset_id must have a value.");
-
-        console.log("get_asset after assets ..");
+    this.get_asset = function(catalog_alias, asset_id, fetch_metadata, callback, error_callback) {
+        cip_common.assert(this.is_connected());
+        cip_common.assert(catalog_alias !== undefined, "Catalog must have an alias.");
+        cip_common.assert(asset_id !== undefined, "The asset_id must have a value.");
 
         var catalog = new cip_catalog.CIPCatalog(this, { alias: catalog_alias });
         
         if(fetch_metadata === true) {
-            console.log("fetch_metadata was true ..");
             var table = new cip_table.CIPTable(this, catalog, "AssetRecords");
-            console.log(catalog, table);
 
             this.criteriasearch(table, 'id == ' + asset_id, function(result) {
-                console.log("criteriasearch returned result ..", result);
                 // Found a result - get the actual asset.
                 result.get(1, 0, function(assets) {
                     if(assets.length !== 1) {
                         log.warning( "The criteriasearch didn't return exactly one result. Check parameters." );
-                        callback( null );
+                        error_callback( assets );
                     } else {
                         var asset = assets[0];
                         callback( asset );
                     };
                 });
-            });
+            }, error_callback);
         } else {
             var asset = new cip_asset.CIPAsset(this, { id: asset_id }, catalog);
             callback( asset );
