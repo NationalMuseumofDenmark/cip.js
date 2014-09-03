@@ -74,7 +74,7 @@ function CIPClient(config) {
 
         // Should we include the jsessionid?
         if(without_jsessionid !== true && this.jsessionid) {
-            result += ";jsessionid" + this.jsessionid;
+            result += ";jsessionid=" + this.jsessionid;
         }
 
         // Populate with defaults.
