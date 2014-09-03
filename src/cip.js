@@ -32,84 +32,146 @@ function CIPClient(config) {
         catalogs: null
     };
 
+    this.default_named_parameters = {
+        apiversion: 4,
+        serveraddress: "localhost"
+    };
+
+    /** 
+     * Populates an object with named parameters with the default values.
+     * 
+     * @param {object}|{false} named_parameters - The parameters for the
+     *        query string, false if they should be leaved out.
+     */
+    this.named_parameters_with_defaults = function( named_parameters ) {
+        // We start with the default named parameters.
+        var result = this.default_named_parameters;
+
+        // Did we get any named parameters?
+        if(typeof(named_parameters) === "undefined" || named_parameters === null) {
+            named_parameters = {};
+        } else if(typeof(named_parameters) !== "object") {
+            throw "The named_parameters parameter must be an object, undefined or null.";
+        }
+
+        // Overwrite default named parameters.
+        for(var p in named_parameters) {
+            result[p] = named_parameters[p];
+        }
+    }
+
+    /** 
+     * Generates a URL to the CIP server.
+     * 
+     * @param {string} operation - The name of the function (the path).
+     * @param {object}|{false} named_parameters - The parameters for the
+     *        query string, false if they should be leaved out.
+     * @param {boolean} without_jsessionid - Should the jsessionid be left out of the URL? Default: false
+     */
+    this.generate_url = function( operation, named_parameters, without_jsessionid ) {
+        var result = this.config.endpoint + operation;
+        var query_string = "";
+
+        // Should we include the jsessionid?
+        if(without_jsessionid !== true && this.jsessionid) {
+            result += ";jsessionid" + this.jsessionid;
+        }
+
+        // Populate with defaults.
+        if(named_parameters !== false) {
+            named_parameters = this.named_parameters_with_defaults(named_parameters);
+        } else {
+            named_parameters = {}
+        }
+
+        // Generate the query string from the named parameters.
+        for(var p in named_parameters) {
+            if(query_string.length > 0) {
+                query_string += "&";
+            }
+            query_string += p + ":" + named_parameters[p];
+        }
+
+        // Prepend the question mark if a query exists.
+        if(query_string.length > 0) {
+            result += "?" + query_string;
+        }
+
+        return result;
+    }
+
     /** 
      * Makes a request to the CIP server.
      * 
-     * @param {string} name - The name of the function (the path).
-     * @param {object} options - POST-data options to pass.
+     * @param {string} operation - The name of the function (the path).
+     * @param {object} named_parameters - POST-data options to pass.
      * @param {function} success - The callback function on success.
      * @param {function} error - The callback function on failure.
      * @param {boolean} async - Whether the call should be asynchronous
      */
-    this.ciprequest = function(name, options, success, error, async) {
+    this.ciprequest = function(operation, named_parameters, success, error, async) {
         var self = this; // TODO: Fix this hack
 
         if (async === undefined) {
             async = false;
         }
 
-        var queryStringObject = { 
-            apiversion: 4,
-            serveraddress: "localhost"
-        };
-
-        if (options !== undefined) {
-            for (var key in options) {
-                queryStringObject[key] = options[key];
-            }
+        if (this.jsessionid === null && operation !== "session/open") {
+            console.warn("No jsessionid - consider calling session_open before calling other action.");
         }
-
-        if (this.jsessionid === null && name !== "session/open") {
-            console.error("ERROR: No jsessionid");
-        }
-
-        var jsessionid_container = this.jsessionid===null?"":";jsessionid=" + this.jsessionid;
 
         if (typeof(success) === "function") {
             success = success.bind(this);
+        } else {
+            // The default success function.
+            success = function(response) {
+                console.warn( "Unhandled success from the CIP - consider adding a success callback function the ciprequest call." );
+                console.log( response );
+            };
         }
 
         if (typeof(error) === "function") {
             error = error.bind(this);
+        } else {
+            // The default error function.
+            error = function(response) {
+                console.warn( "Unhandled error from the CIP - consider adding an error callback function the ciprequest call." );
+                console.error( "An error occured when communicating with the CIP.", response );
+                console.trace();
+            };
         }
 
+        // TODO: Consider if this has any effect.
         var error = error;
         var success = success;
+
+        // We are using post calls, so the named parameters go to the body.
+        named_parameters = this.named_parameters_with_defaults(named_parameters);
+
+        var url = this.generate_url( operation, false );
 
         if(typeof(require) != "undefined" && request) {
             return request.post(
                 {
-                    url: this.config.endpoint + name + jsessionid_container,
+                    url: url,
                     method: 'POST',
-                    form: queryStringObject
+                    form: named_parameters
                 },
                 function(is_error, response, body) {
-                    if(response.statusCode != 200) {
-                        if(error === undefined) {
-                            console.log("No error function defined, calling success(null) :(");
-                            success(null);
-                        } else {
-                            error(response.body);
-                        }
+                    if(is_error || response.statusCode != 200) {
+                        error( response );
                     } else {
-                        success(JSON.parse(response.body));
+                        success( JSON.parse(response.body) );
                     }
                 }
             );
         } else if ( qwest && typeof(qwest) === 'object' ) {
-            return qwest.post(
-                this.config.endpoint + name + jsessionid_container, 
-                queryStringObject, 
-                { async: async },
-                function() {
-                  // Set XMLHTTP properties here
+            return qwest.post( url, named_parameters,
+                {
+                    async: async
                 })
-                .success(success || function(response) {
-                    console.log(["default success", name, response]);
-                })
-                .error(error || function(response) {
-                    console.log(["default error", name, response]);
-                });
+                .success(success)
+                .error(error);
         }
     };
     
