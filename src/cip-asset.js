@@ -106,7 +106,7 @@ function CIPAsset(cip, fields, catalog) {
             "metadata",
             "getrelatedassets",
             catalog.alias,
-            this.fields.id
+            this.fields.id,
             relation
         ], {}, callback);
     };
