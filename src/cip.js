@@ -117,6 +117,10 @@ function CIPClient(config) {
     this.ciprequest = function(operation, named_parameters, success, error, async) {
         var self = this; // TODO: Fix this hack
 
+        if(typeof(operation) === 'object') {
+            operation = operation.join("/");
+        }
+
         if (async === undefined) {
             async = false;
         }

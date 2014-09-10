@@ -95,6 +95,21 @@ function CIPAsset(cip, fields, catalog) {
             named_parameters
         );
     };
+
+    /**
+     * Returns a URL for a thumbnail image.
+     * See: http://cumulus.natmus.dk/CIP/doc/CIP.html#metadata_getrelatedassets
+     * @param {string} relation - Possible values: contains, iscontainedin, references, isreferencedby, isvariantmasterof, isvariantof, isalternatemaster, isalternateof
+     */
+    this.get_related_assets = function(relation, callback) {
+        return this.cip.ciprequest([
+            "metadata",
+            "getrelatedassets",
+            catalog.alias,
+            this.fields.id
+            relation
+        ], {}, callback);
+    };
 }
 
 if(typeof(exports) != "undefined") {
