@@ -187,7 +187,6 @@ function CIPClient(config) {
 						}
 					}
 				}
-<<<<<<< HEAD
 			);
 		} else if ( qwest && typeof(qwest) === 'object' ) {
 			return qwest.post(
@@ -297,73 +296,6 @@ function CIPClient(config) {
 	 */
 	this.search = function(table, query, callback, error_callback) {
 		return this.advancedsearch(table, undefined, query, undefined, callback, error_callback);
-=======
-
-                callback(this.cache.catalogs);
-            }
-        });
-        
-    };
-    
-    /**
-     * Performs a metadata search in the CIP. Called from higher-level classes.
-     * @param {object} catalog - The catalog to search in, as returned by NatMus#get_catalogs.
-     * @param {object} table - The table to search in, as returned by NatMus#get_tables.
-     * @param {string} query - The query to search for.
-     */
-    this.search = function(table, query, callback) {
-        cip_common.assert(this.is_connected());        
-        cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
-        cip_common.assert(query !== undefined && query !== "", "Must define a query");
-        
-        this.ciprequest(
-            "metadata/search/"+table.catalog.alias, 
-            {
-                quicksearchstring: query,
-                table: table.name,
-                collection: ""  // We pass an empty collection to get the system to create one for us and return the name
-            }, 
-            function(response) {
-                // The API returns a collection ID which we will then proceed to enumerate
-                if(response === null) {
-                    callback(null);
-                } else {
-                    var collection = response.collection;
-                    callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
-                }
-            }
-        );
-    };
-    
-    /**
-     * Performs a metadata search in the CIP given as a query string. Called from higher-level classes.
-     * @param {object} table - The table to search in, as returned by NatMus#get_tables.
-     * @param {string} query - The query to search for.
-     * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPSearchResult.
-     */
-    this.criteriasearch = function(table, querystring, callback, error_callback) {
-
-        cip_common.assert(this.is_connected());        
-        cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
-        cip_common.assert(querystring !== undefined && querystring !== "", "Must define a query");
-
-        this.ciprequest(
-            "metadata/search/"+table.catalog.alias, 
-            {
-                querystring: querystring,
-                table: table.name,
-                collection: ""  // We pass an empty collection to get the system to create one for us and return the name
-            }, 
-            function(response) {
-                // The API returns a collection ID which we will then proceed to enumerate
->>>>>>> Adding an error callback on the get_asset method.
-                if(response === null) {
-                    callback(null);
-                } else {
-                    var collection = response.collection;
-                    callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
-                }
-<<<<<<< HEAD
 	};
 	
 	/**
@@ -468,59 +400,6 @@ function CIPClient(config) {
 			callback(response.version);
 		}, error_callback);
 	};
-=======
-            },
-            error_callback
-        );
-    };
-    
-    /**
-     * Gives a reference to a CIPAsset with or without its metadata.
-     * @param {string} catalog_alias - The catalog alias from with to fetch the asset.
-     * @param {number} asset_id - The ID of the asset as known in Cumulus.
-     * @param {boolean} fetch_metadata - Should the CIPAsset have it's metadata populated?
-     * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPAsset.
-     * @param {function} callback - The callback function called if something goes wrong.
-     */
-    this.get_asset = function(catalog_alias, asset_id, fetch_metadata, callback, error_callback) {
-        cip_common.assert(this.is_connected());
-        cip_common.assert(catalog_alias !== undefined, "Catalog must have an alias.");
-        cip_common.assert(asset_id !== undefined, "The asset_id must have a value.");
-
-        var catalog = new cip_catalog.CIPCatalog(this, { alias: catalog_alias });
-        
-        if(fetch_metadata === true) {
-            var table = new cip_table.CIPTable(this, catalog, "AssetRecords");
-
-            this.criteriasearch(table, 'id == ' + asset_id, function(result) {
-                // Found a result - get the actual asset.
-                result.get(1, 0, function(assets) {
-                    if(assets.length !== 1) {
-                        log.warning( "The criteriasearch didn't return exactly one result. Check parameters." );
-                        error_callback( assets );
-                    } else {
-                        var asset = assets[0];
-                        callback( asset );
-                    };
-                });
-            }, error_callback);
-        } else {
-            var asset = new cip_asset.CIPAsset(this, { id: asset_id }, catalog);
-            callback( asset );
-        }
-    };
-    
-    /**
-     * Gets the version of the various services on the CIP stack.
-     * @return object
-     */
-    this.get_version = function(callback) {
-        cip_common.assert(typeof(callback) === "function", "The callback must be a function.");
-        this.ciprequest("system/getversion", {}, function(response) {
-            callback(response.version);
-        });
-    };
->>>>>>> Adding an error callback on the get_asset method.
 }
 
 if(typeof(exports) != "undefined") {
