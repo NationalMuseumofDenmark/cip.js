@@ -109,7 +109,7 @@ function CIPClient(config) {
      * Makes a request to the CIP server.
      * 
      * @param {string} operation - The name of the function (the path).
-     * @param {object} named_parameters - POST-data options to pass.
+     * @param {object}|{boolean} named_parameters - POST-data options to pass, if false - defaults are left out.
      * @param {function} success - The callback function on success.
      * @param {function} error - The callback function on failure.
      * @param {boolean} async - Whether the call should be asynchronous
@@ -166,7 +166,11 @@ function CIPClient(config) {
                     if(is_error || response.statusCode != 200) {
                         error( response );
                     } else {
-                        success( JSON.parse(response.body) );
+                        if(response.body === "") {
+                            success( true );
+                        } else {
+                            success( JSON.parse(response.body) );
+                        }
                     }
                 }
             );
