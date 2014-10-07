@@ -8,6 +8,7 @@
 
 if(typeof(require) != "undefined") {
     cip_common = require('./cip-common.js');
+    cip_layout = require('./cip-layout.js');
 }
 
 
@@ -40,7 +41,7 @@ function CIPTable(cip, catalog, name) {
             table: this.name
         }, function(response) {
             this.layout = response;
-            callback(new CIPLayout(cip, this.layout.fields));
+            callback(new cip_layout.CIPLayout(cip, this.layout.fields));
         });
     };
     

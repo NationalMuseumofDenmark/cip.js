@@ -33,4 +33,8 @@ function CIPLayout(cip, fields) {
 
 if(typeof(exports) != "undefined") {
     exports.CIPLayout = CIPLayout;
+} else {
+    window.cip_layout = {
+        CIPLayout: CIPLayout
+    };
 }
