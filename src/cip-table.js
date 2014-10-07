@@ -29,15 +29,19 @@ function CIPTable(cip, catalog, name) {
         var returnvalue = null;
         var cip = this.cip;
 
-        this.cip.ciprequest("metadata/getlayout/"+this.cip.config.constants.layout_alias, {
-            catalogname: this.catalog.name,
+        var path = [
+            "metadata",
+            "getlayout",
+            this.catalog.alias,
+            this.cip.config.constants.layout_alias
+        ].join("/");
+
+        this.cip.ciprequest(path, {
             table: this.name
         }, function(response) {
             this.layout = response;
-
             callback(new CIPLayout(cip, this.layout.fields));
-        }); 
-        
+        });
     };
     
     /**
