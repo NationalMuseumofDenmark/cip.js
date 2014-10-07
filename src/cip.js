@@ -333,20 +333,16 @@ function CIPClient(config) {
      * @param {function} callback - The callback function called if something goes wrong.
      */
     this.get_asset = function(catalog_alias, asset_id, fetch_metadata, callback, error_callback) {
-        cip_common.assert(this.is_connected());
-        cip_common.assert(catalog_alias !== undefined, "Catalog must have an alias.");
+        var table = this.get_table(catalog_alias);
+        // The asset_id must be sat.
         cip_common.assert(asset_id !== undefined, "The asset_id must have a value.");
-
-        var catalog = new cip_catalog.CIPCatalog(this, { alias: catalog_alias });
         
         if(fetch_metadata === true) {
-            var table = new cip_table.CIPTable(this, catalog, "AssetRecords");
-
             this.criteriasearch(table, 'id == ' + asset_id, null, function(result) {
                 // Found a result - get the actual asset.
                 result.get(1, 0, function(assets) {
                     if(assets.length !== 1) {
-                        log.warning( "The criteriasearch didn't return exactly one result. Check parameters." );
+                        console.warn( "The criteriasearch didn't return exactly one result. Check parameters." );
                         error_callback( assets );
                     } else {
                         var asset = assets[0];
@@ -355,9 +351,25 @@ function CIPClient(config) {
                 });
             }, error_callback);
         } else {
-            var asset = new cip_asset.CIPAsset(this, { id: asset_id }, catalog);
+            var asset = new cip_asset.CIPAsset(this, { id: asset_id }, table.catalog);
             callback( asset );
         }
+    };
+
+    /**
+     * Gives a reference to a CIPTable.
+     * @param {string} catalog_alias - The catalog alias from with to fetch the asset.
+     * @param {number} asset_id - The ID of the asset as known in Cumulus.
+     * @return {CIPTable} An object representing a table in the CIP.
+     */
+    this.get_table = function(catalog_alias, table_name) {
+        cip_common.assert(catalog_alias !== undefined, "Catalog must have an alias.");
+        if(typeof(table_name) == "undefined") {
+            table_name = "AssetRecords";
+        }
+        var catalog = new cip_catalog.CIPCatalog(this, { alias: catalog_alias });
+        var table = new cip_table.CIPTable(this, catalog, table_name);
+        return table;
     };
     
     /**
