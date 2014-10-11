@@ -155,12 +155,12 @@ function CIPClient(config) {
 		var error = error;
 		var success = success;
 
-        // We are using post calls, so the named parameters go to the body.
-        named_parameters = this.named_parameters_with_defaults(named_parameters);
+		// We are using post calls, so the named parameters go to the body.
+		named_parameters = this.named_parameters_with_defaults(named_parameters);
 
-        var url = this.generate_url( operation, false );
+		var url = this.generate_url( operation, false );
 
-        if(typeof(require) != "undefined" && request) {
+		if(typeof(require) != "undefined" && request) {
 		// We are using post calls, so the named parameters go to the body.
 		named_parameters = this.named_parameters_with_defaults(named_parameters);
 
@@ -178,7 +178,12 @@ function CIPClient(config) {
 					if(response == null || response == undefined) {
 						error(null) || success(null);
 					} else if(is_error || response.statusCode != 200) {
-						error( response );
+						if(error === undefined) {
+							console.log("No error function defined, calling success(null) :(");
+							success(null);
+						} else {
+							error(response.body || null);
+						}
 					} else {
 						if(response.body === "") {
 							success( true );
@@ -221,7 +226,7 @@ function CIPClient(config) {
 			user: username,
 			password: password
 		}, function(response) {
-			if (response.jsessionid) {
+			if (response && response != undefined && response.jsessionid) {
 				self.jsessionid = response.jsessionid;
 				console.log("Connected to CIP: "+self.jsessionid);
 				success(response);
@@ -332,11 +337,7 @@ function CIPClient(config) {
 				table: table.name,
 				collection: ""  // We pass an empty collection to get the system to create one for us and return the name
 			}, function(response) {
-				if(response === null) {
-					callback(null);
-				} else {
-					callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
-				}
+				callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
 			}, error_callback
 		);
 	};
