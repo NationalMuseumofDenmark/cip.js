@@ -245,8 +245,9 @@ function CIPClient(config) {
 	/** 
 	 * Returns a list of catalogs on the CIP service. Caches the result.
 	 * @param {function} callback The callback
+	 * @param {function} error_callback - The callback function called an error occurs.
 	 */
-	this.get_catalogs = function(callback) {
+	this.get_catalogs = function(callback, error_callback) {
 		cip_common.assert(this.is_connected());
 
 		if (this.cache.catalogs !== null) {
@@ -265,7 +266,7 @@ function CIPClient(config) {
 				}
 			}
 			callback(this.cache.catalogs);
-		});
+		}, error_callback);
 		
 	};
 	
