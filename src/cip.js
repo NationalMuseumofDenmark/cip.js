@@ -140,7 +140,9 @@ function CIPClient(config) {
 		}
 
 		if (typeof(error) === "function") {
-			error = error.bind(this);
+			// TODO: Consider chaning this back - without this binding the error function
+			// will stay bound to the qwest request within a browser.
+			// error = error.bind(this);
 		} else {
 			// The default error function.
 			error = function(response) {
