@@ -179,12 +179,11 @@ function CIPClient(config) {
 				}
 			);
 		} else if ( qwest && typeof(qwest) === 'object' ) {
-			return qwest.post( url, named_parameters,
-				{
-					async: async
-				})
-				.success(success)
-				.error(error);
+			return qwest.post(
+				url,
+				named_parameters,
+				{ async: async }
+			).success(success).error(error);
 		}
 	};
 	
