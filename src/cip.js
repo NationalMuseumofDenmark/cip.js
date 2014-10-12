@@ -287,7 +287,6 @@ function CIPClient(config) {
 					}
 				}
 				callback(this.cache.catalogs);
-			}
 		}, error_callback);
 		
 	};
