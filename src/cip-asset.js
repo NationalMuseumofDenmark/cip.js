@@ -88,6 +88,8 @@ function CIPAsset(cip, fields, catalog) {
                     named_parameters[allowed_attributes[i]] = given_named_parameters[allowed_attributes[i]];
                 }
             }
+        }
+        
         return this.cip.generate_url(
             "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id,
             named_parameters
@@ -115,5 +117,5 @@ if(typeof(exports) != "undefined") {
 } else {
     window.cip_asset = {
         CIPAsset: CIPAsset
-    }
+    };
 }
