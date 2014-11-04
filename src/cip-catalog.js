@@ -37,14 +37,13 @@ function CIPCatalog(cip, options) {
                                 catalogname: this.name
                             }, 
                             function(response, cip) {
-                                if(response == null) {
+                                if(response !== null) {
                                     for (var i = 0; i < response.tables.length; i++ ) {
                                         returnvalue.push(new cip_table.CIPTable(this, catalog, response.tables[i]));
                                     }
 
                                     callback(returnvalue);
-                                }
-                                else {
+                                } else {
                                     callback(null);
                                 }
                             });
