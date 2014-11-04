@@ -217,9 +217,8 @@ function CIPClient(config) {
 	 * @param {function} success - The callback function on success.
 	 * @param {function} error - The callback function on failure.
 	 */
-	this.session_open = function(username, password, success, error) {
+	this.session_open = function(username, password, success_callback, error_callback) {
 		var self = this; // TODO: fix this hack
-
 
 		this.ciprequest("session/open", {
 			user: username,
@@ -228,17 +227,15 @@ function CIPClient(config) {
 			if (response && response != undefined && response.jsessionid) {
 				self.jsessionid = response.jsessionid;
 				console.log("Connected to CIP: "+self.jsessionid);
-				success(response);
+				success_callback(response);
 			} else {
 				debugger;
-				console.log("SessionID is missing!");
+				error_callback("SessionID is missing from the response!");
 				// fail
 				return;
 			}
 		},
-		function(response) {
-			(error && error(response)) || console.error("Could not make request to CIP.");
-		},
+		error_callback,
 		true);
 
 	};
