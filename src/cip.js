@@ -197,11 +197,7 @@ function CIPClient(config) {
 				url,
 				named_parameters,
 				{ async: async }
-			).success(success || function(response) {
-				console.log(["default success", name, response]);
-			}).error(error || function(response) {
-				console.log(["default error", name, response]);
-			});
+			).success(success).error(error);
 		}
 	};
 	
