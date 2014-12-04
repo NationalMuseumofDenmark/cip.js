@@ -326,7 +326,11 @@ function CIPClient(config) {
 				table: table.name,
 				collection: ""  // We pass an empty collection to get the system to create one for us and return the name
 			}, function(response) {
-				callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
+				if(response) {
+					callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
+				} else {
+					error_callback( new Error('Received an empty result from the CIP, when searching.') );
+				}
 			}, error_callback
 		);
 	};
