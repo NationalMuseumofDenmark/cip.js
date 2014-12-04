@@ -11,6 +11,9 @@ if(typeof(require) != "undefined") {
 }
 
 function CIPSearchResult(cip, collection, catalog) {
+    if(!cip || !collection || !catalog) {
+        throw new Error('Both CIP, collection and catalog must have values when creating a result.');
+    }
     this.cip = cip;
     this.total_rows = collection.totalcount;
     this.collection_id = collection.collection;
@@ -41,7 +44,7 @@ function CIPSearchResult(cip, collection, catalog) {
             function(response) {
                 if(response == null) {
 					if(error_callback) {
-	                    error_callback( new Error("The request for field values returned a null result.") );
+	                    error_callback( new Error('The request for field values returned a null result.') );
 					} else {
 						callback( null );
 					}
@@ -64,3 +67,4 @@ if(typeof(exports) != "undefined") {
         CIPSearchResult: CIPSearchResult
     };
 }
+
