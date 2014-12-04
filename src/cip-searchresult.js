@@ -21,7 +21,7 @@ function CIPSearchResult(cip, collection, catalog) {
      * objects with key-value pairs (this structure differs from the API-returned
      * one). NB: This function is synchronous because of its iterative nature.
      */
-    this.get = function(num_rows, pointer, success) {
+    this.get = function(num_rows, pointer, callback, error_callback) {
         var returnvalue = [];
 
         // We need this hack because the success function is bound to the CIPClient
@@ -40,15 +40,20 @@ function CIPSearchResult(cip, collection, catalog) {
             },
             function(response) {
                 if(response == null) {
-                    success(null);
+					if(error_callback) {
+	                    error_callback( new Error("The request for field values returned a null result.") );
+					} else {
+						callback( null );
+					}
                 } else {
 		            for (var i = 0; i<response.items.length; i++) {
 		                returnvalue.push(new cip_asset.CIPAsset(this, response.items[i], catalog));
 		            }
-		            success(returnvalue);
+		            callback(returnvalue);
 				}
-            });
-
+            },
+			error_callback
+		);
     };
 }
 

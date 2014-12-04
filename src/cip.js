@@ -60,7 +60,10 @@ function CIPClient(config) {
 
 		// Overwrite default named parameters.
 		for(var p in given_named_parameters) {
-			named_parameters[p] = given_named_parameters[p];
+			var value = given_named_parameters[p];
+			if(value !== null && value !== undefined) {
+				named_parameters[p] = value;
+			}
 		}
 		return named_parameters;
 	}
@@ -217,7 +220,6 @@ function CIPClient(config) {
 		}, function(response) {
 			if (response && response != undefined && response.jsessionid) {
 				self.jsessionid = response.jsessionid;
-				console.log("Connected to CIP: "+self.jsessionid);
 				success_callback(response);
 			} else {
 				debugger;
