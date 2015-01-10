@@ -169,7 +169,8 @@ function CIPClient(config) {
 					url: url,
 					method: 'POST',
 					form: named_parameters,
-					timeout: 0
+					timeout: 0,
+					useQuerystring: true
 				},
 				function(is_error, response, body) {
 					if(response == null || response == undefined) {
