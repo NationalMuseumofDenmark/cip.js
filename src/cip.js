@@ -169,7 +169,7 @@ function CIPClient(config) {
 					url: url,
 					method: 'POST',
 					form: named_parameters,
-					timeout: 0,
+					timeout: 60,
 					useQuerystring: true
 				},
 				function(is_error, response, body) {
