@@ -42,9 +42,9 @@ function CIPSearchResult(cip, collection, catalog) {
                 maxreturned: num_rows
             },
             function(response) {
-                if(response == null) {
+                if(response == null || !response.items) {
 					if(error_callback) {
-	                    error_callback( new Error('The request for field values returned a null result.') );
+	                    error_callback( new Error('The request for field values returned a null or empty result.') );
 					} else {
 						callback( null );
 					}
