@@ -330,8 +330,16 @@ function CIPClient(config) {
 					table: table.name,
 					maxreturned: 1
 				}, function(response) {
-					if(response && response.items && response.items.length === 1) {
-						callback(new cip_asset.CIPAsset(this, response.items[0], table.catalog));
+					if(response) {
+						if(response.items) {
+							if(response.items.length === 1) {
+								callback(new cip_asset.CIPAsset(this, response.items[0], table.catalog));
+							} else {
+								error_callback( new Error('Expected one asset, got ' + response.items.length) );
+							}
+						} else {
+							error_callback( new Error('Malformed response, missing the items.') );
+						}
 					} else {
 						error_callback( new Error('Received an empty result from the CIP, when searching.') );
 					}
