@@ -338,7 +338,8 @@ function CIPClient(config) {
 								error_callback( new Error('Expected one asset, got ' + response.items.length) );
 							}
 						} else {
-							error_callback( new Error('Malformed response, missing the items, got ', response) );
+							response = JSON.stringify(response);
+							error_callback( new Error('Malformed response, missing the items, got ' +response) );
 						}
 					} else {
 						error_callback( new Error('Received an empty result from the CIP, when searching.') );
