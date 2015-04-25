@@ -59,14 +59,14 @@ function CIPClient(config) {
 		}
 
 		// Overwrite default named parameters.
-		for(var p in given_named_parameters) {
-			var value = given_named_parameters[p];
+		for(var g in given_named_parameters) {
+			var value = given_named_parameters[g];
 			if(value !== null && value !== undefined) {
-				named_parameters[p] = value;
+				named_parameters[g] = value;
 			}
 		}
 		return named_parameters;
-	}
+	};
 
 	/** 
 	 * Generates a URL to the CIP server.
@@ -89,7 +89,7 @@ function CIPClient(config) {
 		if(named_parameters !== false) {
 			named_parameters = this.named_parameters_with_defaults(named_parameters);
 		} else {
-			named_parameters = {}
+			named_parameters = {};
 		}
 
 		// Generate the query string from the named parameters.
@@ -106,7 +106,7 @@ function CIPClient(config) {
 		}
 
 		return result;
-	}
+	};
 
 	/** 
 	 * Makes a request to the CIP server.
@@ -153,10 +153,6 @@ function CIPClient(config) {
 				console.trace();
 			};
 		}
-
-		// TODO: Consider if this has any effect.
-		var error = error;
-		var success = success;
 
 		// We are using post calls, so the named parameters go to the body.
 		named_parameters = this.named_parameters_with_defaults(named_parameters);
