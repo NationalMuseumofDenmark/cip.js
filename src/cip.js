@@ -169,10 +169,10 @@ function CIPClient(config) {
 					useQuerystring: true
 				},
 				function(is_error, response, body) {
-					if(response == null || response == undefined) {
+					if(response === null || typeof(response) === 'undefined') {
 						error(null) || success(null);
 					} else if(is_error || response.statusCode != 200) {
-						if(error === undefined) {
+						if(typeof(error) === 'undefined') {
 							console.log("No error function defined, calling success(null) :(");
 							success(null);
 						} else {
@@ -309,27 +309,52 @@ function CIPClient(config) {
 	 * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPSearchResult.
 	 * @param {function} error_callback - The callback function called an error occurs.
 	 */
-	this.advancedsearch = function(table, querystring, searchterm, sortby, callback, error_callback) {
-		cip_common.assert(this.is_connected());        
+	this.advancedsearch = function(table, querystring, searchterm, sortby, callback, error_callback, return_single_asset) {
+		cip_common.assert(this.is_connected());
 		cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
 		cip_common.assert(querystring !== undefined || searchterm !== undefined, "Either querystring or searchterm must be defined.");
 
-		this.ciprequest(
-			[ "metadata", "search", table.catalog.alias ],
-			{
-				querystring: querystring,
-				quicksearchstring: searchterm,
-				sortby: sortby,
-				table: table.name,
-				collection: ""  // We pass an empty collection to get the system to create one for us and return the name
-			}, function(response) {
-				if(response) {
-					callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
-				} else {
-					error_callback( new Error('Received an empty result from the CIP, when searching.') );
-				}
-			}, error_callback
-		);
+		if(return_single_asset) {
+			// If we are going for a single asset, we might as well exclude the
+			// collection and include the view path-parameter right away.
+			//
+			cip_common.asset(this.config.constants && this.config.constants.layout_alias,
+				"The layout_alias constant must be set in the config.");
+			// Make the request.
+			this.ciprequest(
+				[ "metadata", "search", table.catalog.alias, this.config.constants.layout_alias ],
+				{
+					querystring: querystring,
+					quicksearchstring: searchterm,
+					sortby: sortby,
+					table: table.name,
+					maxreturned: 1
+				}, function(response) {
+					if(response) {
+						callback(new cip_asset.CIPAsset(this, response, table.catalog));
+					} else {
+						error_callback( new Error('Received an empty result from the CIP, when searching.') );
+					}
+				}, error_callback
+			);
+		} else {
+			this.ciprequest(
+				[ "metadata", "search", table.catalog.alias ],
+				{
+					querystring: querystring,
+					quicksearchstring: searchterm,
+					sortby: sortby,
+					table: table.name,
+					collection: ""  // We pass an empty collection to get the system to create one for us and return the name
+				}, function(response) {
+					if(response) {
+						callback(new cip_searchresult.CIPSearchResult(this, response, table.catalog));
+					} else {
+						error_callback( new Error('Received an empty result from the CIP, when searching.') );
+					}
+				}, error_callback
+			);
+		}
 	};
 	
 	/**
@@ -346,18 +371,12 @@ function CIPClient(config) {
 		cip_common.assert(asset_id !== undefined, "The asset_id must have a value.");
 		
 		if(fetch_metadata === true) {
-			this.criteriasearch(table, 'id == ' + asset_id, null, function(result) {
-				// Found a result - get the actual asset.
-				result.get(1, 0, function(assets) {
-					if(assets.length !== 1) {
-						console.warn( "The criteriasearch didn't return exactly one result. Check parameters." );
-						error_callback( assets );
-					} else {
-						var asset = assets[0];
-						callback( asset );
-					};
-				});
-			}, error_callback);
+			// Search for the id, no searchterm or sorting. The final boolean argument
+			// tells the search to return a single asset, without creating an
+			// intermediary result object.
+			this.advancedsearch(table, 'id == ' + asset_id, undefined, null, function(asset) {
+				callback( asset );
+			}, error_callback, true);
 		} else {
 			var asset = new cip_asset.CIPAsset(this, { id: asset_id }, table.catalog);
 			callback( asset );
