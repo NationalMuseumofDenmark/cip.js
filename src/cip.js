@@ -169,21 +169,20 @@ function CIPClient(config) {
 					useQuerystring: true
 				},
 				function(is_error, response, body) {
-					if(response === null || typeof(response) === 'undefined') {
-						error(null) || success(null);
-					} else if(is_error || response.statusCode != 200) {
-						if(typeof(error) === 'undefined') {
-							console.log("No error function defined, calling success(null) :(");
-							success(null);
+					if(is_error) {
+						error(is_error);
+					} else if(response === null || typeof(response) === 'undefined') {
+						var err = new Error('Got a null or undefined response from the CIP.');
+						error(err);
+					} else if(response.statusCode >= 200 && response.statusCode < 400) {
+						if(response.body === "") {
+							success();
 						} else {
-							error(response.body || null);
+							// We have a body that is assumed to be JSON parseable.
+							success(JSON.parse(response.body));
 						}
 					} else {
-						if(response.body === "") {
-							success( true );
-						} else {
-							success( JSON.parse(response.body) );
-						}
+						error(response.body || null);
 					}
 				}
 			);
