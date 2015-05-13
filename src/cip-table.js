@@ -5,6 +5,13 @@
  * @param {CIPCatalog} catalog - The catalog to which the table belongs.
  * @param {string} name - The name of the table.
  */
+
+if(typeof(require) != "undefined") {
+    cip_common = require('./cip-common.js');
+    cip_layout = require('./cip-layout.js');
+}
+
+
 function CIPTable(cip, catalog, name) {
     this.cip = cip;
     this.catalog = catalog;
@@ -19,19 +26,23 @@ function CIPTable(cip, catalog, name) {
      * @param {function} callback The callback.
      */
     this.get_layout = function(callback) {
-        assert(this.cip.is_connected());
+        cip_common.assert(this.cip.is_connected());
         var returnvalue = null;
         var cip = this.cip;
 
-        this.cip.ciprequest("metadata/getlayout/"+this.cip.config.constants.layout_alias, {
-            catalogname: this.catalog.name,
+        var path = [
+            "metadata",
+            "getlayout",
+            this.catalog.alias,
+            this.cip.config.constants.layout_alias
+        ].join("/");
+
+        this.cip.ciprequest(path, {
             table: this.name
         }, function(response) {
             this.layout = response;
-
-            callback(new CIPLayout(cip, this.layout.fields));
-        }); 
-        
+            callback(new cip_layout.CIPLayout(cip, this.layout.fields));
+        });
     };
     
     /**
@@ -39,7 +50,18 @@ function CIPTable(cip, catalog, name) {
      * @param {string} query - The query to search for.
      */
     this.search = function(query, callback) {
-        cip.search(this, query, callback);
+        this.cip.search(this, query, callback);
     };
 
+    this.criteriasearch = function(querystring, callback) {
+        this.cip.criteriasearch(this, querystring, callback);
+    };
+}
+
+if(typeof(exports) != "undefined") {
+    exports.CIPTable = CIPTable;
+} else {
+    window.cip_table = {
+        CIPTable: CIPTable
+    };
 }

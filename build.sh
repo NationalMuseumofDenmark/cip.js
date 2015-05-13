@@ -3,7 +3,7 @@
 JSDOC="jsdoc";
 CLOSURE_COMPILER="closure";
 
-grep -R TODO *
+grep -R --include=*.js TODO *
 
 rm -rf dist
 mkdir dist
