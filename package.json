@@ -2,6 +2,10 @@
   "name": "cip-js",
   "version": "0.0.0",
   "main": "src/cip.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NationalMuseumofDenmark/cip.js.git"
+  },
   "dependencies": {
     "request": "^2.27.0"
   }
