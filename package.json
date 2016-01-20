@@ -1,6 +1,6 @@
 {
   "name": "cip-js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "src/cip.js",
   "repository": {
     "type": "git",
@@ -10,4 +10,3 @@
     "request": "^2.27.0"
   }
 }
-

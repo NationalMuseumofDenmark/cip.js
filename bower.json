@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "homepage": "https://github.com/NationalMuseumofDenmark/cip.js",
   "authors": [
+    "Jens Christian Hillerup (Socialsquare) <jenschristian@socialsquare.dk>",
     "Kræn Hansen (Socialsquare) <kraen@socialsquare.dk>"
   ],
   "description": "Object-relational wrapper around Cumulus CIP system",
