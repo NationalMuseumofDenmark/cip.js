@@ -1,5 +1,5 @@
-test-credentials.js
 *~
-doc/
-dist/
+doc
+dist
 cumulus-query-format.html
+bower_components

@@ -1,0 +1,24 @@
+{
+  "name": "cip.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/NationalMuseumofDenmark/cip.js",
+  "authors": [
+    "Kræn Hansen (Socialsquare) <kraen@socialsquare.dk>"
+  ],
+  "description": "Object-relational wrapper around Cumulus CIP system",
+  "main": "src/cip.js",
+  "keywords": [
+    "cumulus"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "qwest": "~3.0.0"
+  }
+}
