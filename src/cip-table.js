@@ -6,62 +6,50 @@
  * @param {string} name - The name of the table.
  */
 
-if(typeof(require) != "undefined") {
-    cip_common = require('./cip-common.js');
+var cip_common = require('./cip-common.js'),
     cip_layout = require('./cip-layout.js');
-}
-
 
 function CIPTable(cip, catalog, name) {
-    this.cip = cip;
-    this.catalog = catalog;
-    this.name = name;
-    
-    this.layout = null;
+  this.cip = cip;
+  this.catalog = catalog;
+  this.name = name;
 
-    // TODO: Must have a reference to the layout it uses
-    
-    /**
-     * Returns the layout of the table.
-     * @param {function} callback The callback.
-     */
-    this.get_layout = function(callback) {
-        cip_common.assert(this.cip.is_connected());
-        var returnvalue = null;
-        var cip = this.cip;
+  this.layout = null;
 
-        var path = [
-            "metadata",
-            "getlayout",
-            this.catalog.alias,
-            this.cip.config.constants.layout_alias
-        ].join("/");
+  // TODO: Must have a reference to the layout it uses
 
-        this.cip.ciprequest(path, {
-            table: this.name
-        }, function(response) {
-            this.layout = response;
-            callback(new cip_layout.CIPLayout(cip, this.layout.fields));
-        });
-    };
-    
-    /**
-     * Free-text search in the table.
-     * @param {string} query - The query to search for.
-     */
-    this.search = function(query, callback) {
-        this.cip.search(this, query, callback);
-    };
+  /**
+   * Returns the layout of the table.
+   * @param {function} callback The callback.
+   */
+  this.getLayout = function(callback) {
+    var returnvalue = null;
+    var cip = this.cip;
 
-    this.criteriasearch = function(querystring, callback) {
-        this.cip.criteriasearch(this, querystring, callback);
-    };
+    return this.cip.request([
+      "metadata",
+      "getlayout",
+      this.catalog.alias,
+      this.cip.config.constants.layout_alias
+    ], {
+      table: this.name
+    }, false).then(function(response) {
+      this.layout = response;
+      callback(new cip_layout.CIPLayout(cip, this.layout.fields));
+    });
+  };
+
+  /**
+   * Free-text search in the table.
+   * @param {string} query - The query to search for.
+   */
+  this.search = function(query) {
+    return cip.search(this, query);
+  };
+
+  this.criteriaSearch = function(querystring, callback) {
+    return cip.criteriaSearch(this, querystring, callback);
+  };
 }
 
-if(typeof(exports) != "undefined") {
-    exports.CIPTable = CIPTable;
-} else {
-    window.cip_table = {
-        CIPTable: CIPTable
-    };
-}
+exports.CIPTable = CIPTable;

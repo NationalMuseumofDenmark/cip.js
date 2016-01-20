@@ -6,7 +6,19 @@
     "type": "git",
     "url": "git://github.com/NationalMuseumofDenmark/cip.js.git"
   },
+  "scripts": {
+    "build": "browserify src/cip.js -o dist/cip.js"
+  },
+  "license": "MIT",
   "dependencies": {
     "request": "^2.27.0"
+  },
+  "devDependencies": {
+    "bluebird": "^3.1.1",
+    "browser-request": "^0.3.3",
+    "browserify": "^13.0.0"
+  },
+  "browser": {
+    "request": "browser-request"
   }
 }

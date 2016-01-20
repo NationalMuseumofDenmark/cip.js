@@ -11,10 +11,4 @@ function assert(condition, message) {
     }
 };
 
-if(typeof(exports) != "undefined") {
-	exports.assert = assert;
-} else {
-	window.cip_common = {
-		assert: assert
-	};
-}
+exports.assert = assert;

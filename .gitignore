@@ -3,3 +3,4 @@ doc
 dist
 cumulus-query-format.html
 bower_components
+node_modules

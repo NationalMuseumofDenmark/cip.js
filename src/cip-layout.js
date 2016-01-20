@@ -4,11 +4,12 @@
  * @param {CIPClient} cip - The parent CIP client.
  * @param {array} fields - An array of field definitions
  */
+
 function CIPLayout(cip, fields) {
     this.cip = cip;
     this.fields = fields;
     this.cache = {};
-    
+
     /**
      * Look up a field name given a key.
      * @param {string} key - The key to search for
@@ -25,16 +26,10 @@ function CIPLayout(cip, fields) {
                 return this.fields[i];
             }
         }
-        
+
         // If we didn't find the field, (explicitly) return undefined :(
         return undefined;
     };
 }
 
-if(typeof(exports) != "undefined") {
-    exports.CIPLayout = CIPLayout;
-} else {
-    window.cip_layout = {
-        CIPLayout: CIPLayout
-    };
-}
+exports.CIPLayout = CIPLayout;
