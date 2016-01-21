@@ -268,8 +268,8 @@ function CIPClient(config) {
             // If we are going for a single asset, we might as well exclude the
             // collection and include the view path-parameter right away.
             //
-            cip_common.assert(this.config.constants && this.config.constants.layout_alias,
-              "The layout_alias constant must be set in the config.");
+            cip_common.assert(this.config.constants && this.config.constants.layoutAlias,
+              "The layoutAlias constant must be set in the config.");
 
             // Make the request.
             return this.request([
