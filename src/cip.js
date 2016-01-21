@@ -324,10 +324,8 @@ function CIPClient(config) {
      * @param {string} catalog_alias - The catalog alias from with to fetch the asset.
      * @param {number} asset_id - The ID of the asset as known in Cumulus.
      * @param {boolean} fetch_metadata - Should the CIPAsset have it's metadata populated?
-     * @param {function} callback - The callback function called when an answer is ready, this is passed an instance of CIPAsset.
-     * @param {function} callback - The callback function called if something goes wrong.
      */
-    this.get_asset = function(catalog_alias, asset_id, fetch_metadata, callback, error_callback) {
+    this.getAsset = function(catalog_alias, asset_id, fetch_metadata) {
         var table = this.get_table(catalog_alias);
         // The asset_id must be sat.
         cip_common.assert(asset_id !== undefined, "The asset_id must have a value.");
@@ -336,12 +334,12 @@ function CIPClient(config) {
             // Search for the id, no searchterm or sorting. The final boolean argument
             // tells the search to return a single asset, without creating an
             // intermediary result object.
-            this.advancedsearch(table, 'id == ' + asset_id, undefined, null, function(asset) {
-                callback( asset );
-            }, error_callback, true);
+            return this.advancedSearch(table, 'id == ' + asset_id, undefined, null, true);
         } else {
-            var asset = new cip_asset.CIPAsset(this, { id: asset_id }, table.catalog);
-            callback( asset );
+            return new Promise(function (resolve, reject) {
+				var asset = new cip_asset.CIPAsset(this, { id: asset_id }, table.catalog);
+				resolve(asset);
+			});
         }
     };
 
@@ -351,7 +349,7 @@ function CIPClient(config) {
      * @param {string} table_name - The name of the table as known in Cumulus.
      * @return {CIPTable} An object representing a table in the CIP.
      */
-    this.get_table = function(catalog_alias, table_name) {
+    this.getTable = function(catalog_alias, table_name) {
         cip_common.assert(catalog_alias !== undefined, "Catalog must have an alias.");
         if(typeof(table_name) == "undefined") {
             table_name = "AssetRecords";
@@ -366,11 +364,11 @@ function CIPClient(config) {
      * @param {function} callback - A function that is called with an object as first argument when the request succeeds.
      * @param {function} error_callback - A function that is called when the request fails.
      */
-    this.get_version = function(callback, error_callback) {
+    this.getVersion = function(callback, error_callback) {
         cip_common.assert(typeof(callback) === "function", "The callback must be a function.");
-        this.ciprequest("system/getversion", {}, function(response) {
-            callback(response.version);
-        }, error_callback);
+        this.request(['system', 'getversion']).then(function(response) {
+			return response.version;
+		});
     };
 }
 
