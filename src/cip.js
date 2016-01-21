@@ -135,15 +135,19 @@ function CIPClient(config) {
         var url = this.generateURL(operation, false);
 
         return new Promise(function (resolve, reject) {
-            request.post({
+            var options = {
                 url: url,
                 method: 'POST',
-                form: namedParameters,
                 timeout: 60000, // 60 secs
                 useQuerystring: true,
-                body: data,
                 json: true
-            }, function(err, response) {
+            };
+            if(namedParameters && !data) {
+              options.form = namedParameters;
+            } else if(data) {
+              options.body = data;
+            }
+            request.post(options, function(err, response) {
                 if(err) {
                     reject(err);
                 } else {
