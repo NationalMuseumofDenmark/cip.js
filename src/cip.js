@@ -9,6 +9,7 @@
 var request = require('request'),
     Promise = require('bluebird'),
     cip_catalog = require('./cip-catalog'),
+    cip_table = require('./cip-table'),
     cip_searchresult = require('./cip-searchresult'),
     cip_common = require('./cip-common');
 
