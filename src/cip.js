@@ -326,7 +326,7 @@ function CIPClient(config) {
      * @param {boolean} fetch_metadata - Should the CIPAsset have it's metadata populated?
      */
     this.getAsset = function(catalog_alias, asset_id, fetch_metadata) {
-        var table = this.get_table(catalog_alias);
+        var table = this.getTable(catalog_alias);
         // The asset_id must be sat.
         cip_common.assert(asset_id !== undefined, "The asset_id must have a value.");
 
