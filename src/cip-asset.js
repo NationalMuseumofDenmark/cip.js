@@ -33,10 +33,12 @@ function CIPAsset(cip, fields, catalog) {
         if (version !== undefined) {
             namedParameters['version'] = version;
         }
-        return cip.generateURL(
-            "asset/download/"+ catalog.alias +"/" + this.fields.id,
-            namedParameters
-        );
+        return cip.generateURL([
+            'asset',
+            'download',
+            catalog.alias,
+            this.fields.id
+        ], namedParameters);
     };
 
     /**
@@ -44,12 +46,14 @@ function CIPAsset(cip, fields, catalog) {
      * @param {function} callback The function to be called with the results of the query.
      */
     this.getVersions = function(callback) {
-        cip.request(
-          ['asset', 'getversions', catalog.alias, this.fields.id],
-          {},
-          false).then(function(response) {
-              callback(response.versions);
-          });
+        return cip.request([
+          'asset',
+          'getversions',
+          catalog.alias,
+          this.fields.id
+        ]).then(function(response) {
+            return response.versions;
+        });
     };
 
     /**
@@ -57,42 +61,43 @@ function CIPAsset(cip, fields, catalog) {
      */
     this.getImageURL = function(namedParameters)  {
         // TODO: Consider filtering the named parameters, as in get_thumbnail_url.
-        return cip.generateURL(
-            "preview/image/"+ catalog.alias +"/" + this.fields.id,
-            namedParameters
-        );
+        return cip.generateURL([
+            'preview',
+            'image',
+            catalog.alias,
+            this.fields.id
+        ], namedParameters);
     };
 
     /**
      * Returns a URL for a thumbnail image.
-     * @param {object} given_named_parameters - Option definitions for the thumbnails. You can define the following parameters: size, maxsize, rotate, format, quality. All of them are integers, except for format which is either 'png' or 'jpeg'. Moreover rotate must be divisible by 90.
+     * @param {object} givenNamedParameters - Option definitions for the thumbnails. You can define the following parameters: size, maxsize, rotate, format, quality. All of them are integers, except for format which is either 'png' or 'jpeg'. Moreover rotate must be divisible by 90.
      */
-    this.getThumbnailURL = function(given_named_parameters, include_jsessionid) {
-        var option_string = "";
-        var ampersand = "";
-        var before_querystring = "";
-        var named_parameters = {};
-        var allowed_attributes = ["size", "maxsize", "rotate", "format", "quality"];
+    this.getThumbnailURL = function(givenNamedParameters, withoutJSessionID) {
+        var namedParameters = {};
+        var allowedAttributes = ["size", "maxsize", "rotate", "format", "quality"];
 
-        // Ensure that only the given named_parameters are added to the query string
-        if (given_named_parameters === undefined) {
-            given_named_parameters = {};
+        // Ensure that only the given namedParameters are added to the query string
+        if(givenNamedParameters === undefined) {
+            givenNamedParameters = {};
         }
 
-        for (var i in allowed_attributes) {
-            if (given_named_parameters[allowed_attributes[i]] !== undefined) {
-                if (allowed_attributes[i] !== "format") {
-                    named_parameters[allowed_attributes[i]] = parseInt(given_named_parameters[allowed_attributes[i]]);
+        for(var i in allowedAttributes) {
+            if(givenNamedParameters[allowedAttributes[i]] !== undefined) {
+                if(allowedAttributes[i] !== "format") {
+                    namedParameters[allowedAttributes[i]] = parseInt(givenNamedParameters[allowedAttributes[i]]);
                 } else {
-                    named_parameters[allowed_attributes[i]] = given_named_parameters[allowed_attributes[i]];
+                    namedParameters[allowedAttributes[i]] = givenNamedParameters[allowedAttributes[i]];
                 }
             }
         }
 
-        return cip.generate_url(
-            "preview/thumbnail/"+ catalog.alias +"/" + this.fields.id,
-            named_parameters
-        );
+        return cip.generateURL([
+          'preview',
+          'thumbnail',
+          catalog.alias,
+          this.fields.id
+        ], namedParameters, withoutJSessionID);
     };
 
     /**
@@ -107,7 +112,7 @@ function CIPAsset(cip, fields, catalog) {
             catalog.alias,
             this.fields.id,
             relation
-        ], {}, false);
+        ]);
     };
 }
 

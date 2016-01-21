@@ -15,7 +15,7 @@ function CIPLayout(cip, fields) {
      * @param {string} key - The key to search for
      * @return string The name belonging to the specified key, or undefined if the key could not be found.
      */
-    this.lookup_field = function (key) {
+    this.lookupField = function (key) {
         if (this.cache[key] !== undefined) {
             return this.cache[key];
         }

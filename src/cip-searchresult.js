@@ -26,29 +26,33 @@ function CIPSearchResult(cip, collection, catalog) {
     /**
      * Gets a specified number of search results, conveniently formatted as
      * objects with key-value pairs (this structure differs from the API-returned
-     * one). NB: This function is synchronous because of its iterative nature.
+     * one).
      */
     this.get = function(numRows, pointer) {
         if (numRows === undefined) {
             numRows = 100;
         }
 
-        var layoutAlias = cip.config.constants.layout_alias;
+        var layoutAlias = cip.config.constants.layoutAlias;
 
-        return cip.request(['metadata', 'getfieldvalues', layoutAlias], {
+        return cip.request([
+            'metadata',
+            'getfieldvalues',
+            layoutAlias
+        ], {
             collection: this.collection_id,
             startindex: pointer,
             maxreturned: numRows
         }).then(function(response) {
-          if(response === null || !response.body.items) {
-            throw new Error('The request for field values returned a null or empty result.');
-          } else {
-            var result = [];
-            for (var i = 0; i < response.body.items.length; i++) {
-                result.push(new cip_asset.CIPAsset(cip, response.body.items[i], catalog));
+            if(response === null || !response.body.items) {
+                throw new Error('The request for field values returned a null or empty result.');
+            } else {
+                var result = [];
+                for (var i = 0; i < response.body.items.length; i++) {
+                    result.push(new cip_asset.CIPAsset(cip, response.body.items[i], catalog));
+                }
+                return result;
             }
-            return result;
-          }
         });
     };
 }

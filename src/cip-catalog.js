@@ -15,7 +15,7 @@ function CIPCatalog(cip, options) {
     }
 
     if(this.alias === undefined) {
-        this.alias = cip.config.catalog_aliases[this.name];
+        this.alias = cip.config.catalogAliases[this.name];
     }
 
     /**
@@ -27,44 +27,35 @@ function CIPCatalog(cip, options) {
         var catalog = this;
 
         return cip.request([
-          'metadata',
-          'gettables',
-          cip.config.constants.catch_all_alias
+            'metadata',
+            'gettables',
+            cip.config.constants.catchAllAlias
         ], {
-          catalogname: this.name
-        }, false).then(function(response) {
-          var result = [];
-          if(response && response.body && response.body.tables) {
-            var tables = response.body.tables;
-            for (var i = 0; i < tables.length; i++ ) {
-              result.push(new cip_table.CIPTable(cip, catalog, tables[i]));
+            catalogname: this.name
+        }).then(function(response) {
+            var result = [];
+            if(response && response.body && response.body.tables) {
+                var tables = response.body.tables;
+                for (var i = 0; i < tables.length; i++ ) {
+                    result.push(new cip_table.CIPTable(cip, catalog, tables[i]));
+                }
+                return result;
+            } else {
+                throw new Error('Malformed response.');
             }
-            return result;
-          } else {
-            throw new Error('Malformed response.');
-          }
         });
     };
 
-    this.get_categories = function(id, levels, callback) {
-        var returnvalue = [];
-
-        // We need to cache the catalog because the callback later binds this to the CIP client.
-        var catalog = this;
-
-        this.cip.ciprequest("metadata/getcategories/" + this.alias + "/categories",
-                            {
-                                categoryid: id,
-                                levels: levels
-                            },
-                            function(response, cip) {
-                                if(response == null) {
-                                    callback(null);
-                                } else {
-                                    callback(response);
-                                }
-                            });
-
+    this.getCategories = function(id, levels) {
+        return cip.request([
+            'metadata',
+            'getcategories',
+            this.alias,
+            'categories'
+        ], {
+            categoryid: id,
+            levels: levels
+        });
     };
 
 }
