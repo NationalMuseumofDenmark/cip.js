@@ -118,9 +118,7 @@ function CIPClient(config) {
      */
     this.request = function(operation, namedParameters, data) {
         if(typeof(data) !== 'object') {
-            data = false;
-        } else {
-            throw new Error('The data parameter is not yet implemented.');
+            data = null;
         }
 
         if(typeof(operation) === 'object') {
@@ -143,6 +141,7 @@ function CIPClient(config) {
                 form: namedParameters,
                 timeout: 60000, // 60 secs
                 useQuerystring: true,
+                body: data,
                 json: true
             }, function(err, response) {
                 if(err) {
