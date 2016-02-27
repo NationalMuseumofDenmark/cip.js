@@ -218,7 +218,7 @@ function CIPClient(config) {
      * @param {function} error_callback - The callback function called an error occurs.
      */
     this.getCatalogs = function() {
-        cipCommon.assert(this.isConnected());
+        cipCommon.assert(this.isConnected(), 'Need a session to get catalogs');
 
         var client = this;
 
