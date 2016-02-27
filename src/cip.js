@@ -215,8 +215,8 @@ function CIPClient(config) {
 
         var client = this;
 
-        if(client.cache.catalogs) {
-            return client.cache.catalogs;
+        if (client.cache.catalogs) {
+            return Promise.resolve(client.cache.catalogs);
         }
 
         return this.request('metadata/getcatalogs', {}, false)
