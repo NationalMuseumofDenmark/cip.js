@@ -5,8 +5,8 @@
  * @param {object} options - An object as returned by the CIP describing the catalog.
  */
 
-var cip_table = require('./cip-table'),
-    cip_common = require('./cip-common');
+var cipTable = require('./cip-table'),
+    cipCommon = require('./cip-common');
 
 function CIPCatalog(cip, options) {
 
@@ -14,7 +14,7 @@ function CIPCatalog(cip, options) {
         this[key] = options[key];
     }
 
-    if(this.alias === undefined) {
+    if (this.alias === undefined) {
         this.alias = cip.config.catalogAliases[this.name];
     }
 
@@ -34,10 +34,10 @@ function CIPCatalog(cip, options) {
             catalogname: this.name
         }).then(function(response) {
             var result = [];
-            if(response && response.body && response.body.tables) {
+            if (response && response.body && response.body.tables) {
                 var tables = response.body.tables;
                 for (var i = 0; i < tables.length; i++ ) {
-                    result.push(new cip_table.CIPTable(cip, catalog, tables[i]));
+                    result.push(new cipTable.CIPTable(cip, catalog, tables[i]));
                 }
                 return result;
             } else {

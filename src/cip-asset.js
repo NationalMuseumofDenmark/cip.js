@@ -75,16 +75,16 @@ function CIPAsset(cip, fields, catalog) {
      */
     this.getThumbnailURL = function(givenNamedParameters, withoutJSessionID) {
         var namedParameters = {};
-        var allowedAttributes = ["size", "maxsize", "rotate", "format", "quality"];
+        var allowedAttributes = ['size', 'maxsize', 'rotate', 'format', 'quality'];
 
         // Ensure that only the given namedParameters are added to the query string
-        if(givenNamedParameters === undefined) {
+        if (givenNamedParameters === undefined) {
             givenNamedParameters = {};
         }
 
-        for(var i in allowedAttributes) {
-            if(givenNamedParameters[allowedAttributes[i]] !== undefined) {
-                if(allowedAttributes[i] !== "format") {
+        for (var i in allowedAttributes) {
+            if (givenNamedParameters[allowedAttributes[i]] !== undefined) {
+                if (allowedAttributes[i] !== 'format') {
                     namedParameters[allowedAttributes[i]] = parseInt(givenNamedParameters[allowedAttributes[i]]);
                 } else {
                     namedParameters[allowedAttributes[i]] = givenNamedParameters[allowedAttributes[i]];
@@ -107,8 +107,8 @@ function CIPAsset(cip, fields, catalog) {
      */
     this.getRelatedAssets = function(relation) {
         return cip.request([
-            "metadata",
-            "getrelatedassets",
+            'metadata',
+            'getrelatedassets',
             catalog.alias,
             this.fields.id,
             relation

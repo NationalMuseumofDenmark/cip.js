@@ -8,17 +8,17 @@
 
 var request = require('request'),
     Promise = require('bluebird'),
-    cip_catalog = require('./cip-catalog'),
-    cip_asset = require('./cip-asset'),
-    cip_table = require('./cip-table'),
-    cip_searchresult = require('./cip-searchresult'),
-    cip_common = require('./cip-common');
+    cipCatalog = require('./cip-catalog'),
+    cipAsset = require('./cip-asset'),
+    cipTable = require('./cip-table'),
+    cipSearchresult = require('./cip-searchresult'),
+    cipCommon = require('./cip-common');
 
 /**
  * A general-purpose client library for CIP endpoints. Implements session
  * handling and requests.
  * @constructor
- * @param {string} config - A "handle" object defining various settings about the CIP endpoint.
+ * @param {string} config - A 'handle' object defining various settings about the CIP endpoint.
  */
 
 function CIPClient(config) {
@@ -26,8 +26,10 @@ function CIPClient(config) {
     this.jsessionid = null;
     this.DEBUG = true;
 
-    cip_common.assert(config !== undefined, "The CIPClient must be passed a config object.");
-    cip_common.assert(config.endpoint !== undefined, "The config must have an endpoint property.");
+    cipCommon.assert(config !== undefined,
+                     'The CIPClient must be passed a config object.');
+    cipCommon.assert(config.endpoint !== undefined,
+                     'The config must have an endpoint property.');
 
     this.cache = {
         catalogs: null
@@ -35,7 +37,7 @@ function CIPClient(config) {
 
     this.defaultNamedParameters = {
         apiversion: 4,
-        serveraddress: "localhost"
+        serveraddress: 'localhost'
     };
 
     /**
@@ -48,21 +50,22 @@ function CIPClient(config) {
         var namedParameters = {};
 
         // We start with the default named parameters
-        for(var p in this.defaultNamedParameters) {
+        for (var p in this.defaultNamedParameters) {
             namedParameters[p] = this.defaultNamedParameters[p];
         }
 
         // Did we get any named parameters?
-        if(typeof(givenNamedParameters) === "undefined" || givenNamedParameters === null) {
+        if (typeof(givenNamedParameters) === 'undefined' ||
+            givenNamedParameters === null) {
             givenNamedParameters = {};
-        } else if(typeof(givenNamedParameters) !== "object") {
+        } else if (typeof(givenNamedParameters) !== 'object') {
             throw new Error('The namedParameters parameter must be an object, undefined or null.');
         }
 
         // Overwrite default named parameters.
-        for(var g in givenNamedParameters) {
+        for (var g in givenNamedParameters) {
             var value = givenNamedParameters[g];
-            if(value !== null && value !== undefined) {
+            if (value !== null && value !== undefined) {
                 namedParameters[g] = value;
             }
         }
@@ -78,35 +81,35 @@ function CIPClient(config) {
      * @param {boolean} withoutJSessionID - Should the jsessionid be left out of the URL? Default: false
      */
     this.generateURL = function(operation, namedParameters, withoutJSessionID) {
-      var result = this.config.endpoint + operation;
-      var queryString = "";
+        var result = this.config.endpoint + operation;
+        var queryString = '';
 
-      // Should we include the jsessionid?
-      if(withoutJSessionID !== true && this.jsessionid) {
-          result += ";jsessionid=" + this.jsessionid;
-      }
+        // Should we include the jsessionid?
+        if (withoutJSessionID !== true && this.jsessionid) {
+            result += ';jsessionid=' + this.jsessionid;
+        }
 
-      // Populate with defaults.
-      if(namedParameters !== false) {
-          namedParameters = this.namedParametersWithDefaults(namedParameters);
-      } else {
-          namedParameters = {};
-      }
+        // Populate with defaults.
+        if (namedParameters !== false) {
+            namedParameters = this.namedParametersWithDefaults(namedParameters);
+        } else {
+            namedParameters = {};
+        }
 
-      // Generate the query string from the named parameters.
-      for(var p in namedParameters) {
-          if(queryString.length > 0) {
-              queryString += "&";
-          }
-          queryString += p + "=" + namedParameters[p];
-      }
+        // Generate the query string from the named parameters.
+        for (var p in namedParameters) {
+            if (queryString.length > 0) {
+                queryString += '&';
+            }
+            queryString += p + '=' + namedParameters[p];
+        }
 
-      // Prepend the question mark if a query exists.
-      if(queryString.length > 0) {
-          result += "?" + queryString;
-      }
+        // Prepend the question mark if a query exists.
+        if (queryString.length > 0) {
+            result += '?' + queryString;
+        }
 
-      return result;
+        return result;
     };
 
     /**
@@ -117,16 +120,16 @@ function CIPClient(config) {
      * @param {object}|{boolean} data - POST-data options to pass, if false - defaults are left out.
      */
     this.request = function(operation, namedParameters, data) {
-        if(typeof(data) !== 'object') {
+        if (typeof(data) !== 'object') {
             data = null;
         }
 
-        if(typeof(operation) === 'object') {
-            operation = operation.join("/");
+        if (typeof(operation) === 'object') {
+            operation = operation.join('/');
         }
 
-        if (this.jsessionid === null && operation !== "session/open") {
-            console.warn("No jsessionid - consider calling session_open before calling other action.");
+        if (this.jsessionid === null && operation !== 'session/open') {
+            console.warn('No jsessionid - consider calling session_open before calling other action.');
         }
 
         // We are using post calls, so the named parameters go to the body.
@@ -134,7 +137,7 @@ function CIPClient(config) {
 
         var url = this.generateURL(operation, false);
 
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject) {
             var options = {
                 url: url,
                 method: 'POST',
@@ -142,13 +145,13 @@ function CIPClient(config) {
                 useQuerystring: true,
                 json: true
             };
-            if(namedParameters && !data) {
-              options.form = namedParameters;
-            } else if(data) {
-              options.body = data;
+            if (namedParameters && !data) {
+                options.form = namedParameters;
+            } else if (data) {
+                options.body = data;
             }
             request.post(options, function(err, response) {
-                if(err) {
+                if (err) {
                     reject(err);
                 } else {
                     resolve(response);
@@ -178,7 +181,7 @@ function CIPClient(config) {
             user: username,
             password: password
         }).then(function(response) {
-            if(response && response.body && response.body.jsessionid) {
+            if (response && response.body && response.body.jsessionid) {
                 client.jsessionid = response.body.jsessionid;
                 return response;
             } else {
@@ -208,7 +211,7 @@ function CIPClient(config) {
      * @param {function} error_callback - The callback function called an error occurs.
      */
     this.getCatalogs = function() {
-        cip_common.assert(this.isConnected());
+        cipCommon.assert(this.isConnected());
 
         var client = this;
 
@@ -216,15 +219,15 @@ function CIPClient(config) {
             return client.cache.catalogs;
         }
 
-        return this.request("metadata/getcatalogs", {}, false)
+        return this.request('metadata/getcatalogs', {}, false)
         .then(function(response) {
             client.cache.catalogs =  [];
             var catalogs = response.body.catalogs;
             var aliases = client.config.catalogAliases;
-            for(var i=0; i<catalogs.length; i++) {
+            for (var i=0; i<catalogs.length; i++) {
                 var catobj = catalogs[i];
                 if (catobj.name in aliases)  {
-                    var catalog = new cip_catalog.CIPCatalog(client, catalogs[i]);
+                    var catalog = new cipCatalog.CIPCatalog(client, catalogs[i]);
                     client.cache.catalogs.push(catalog);
                 }
             }
@@ -264,21 +267,21 @@ function CIPClient(config) {
      * @param {function} error_callback - The callback function called an error occurs.
      */
     this.advancedSearch = function(table, querystring, searchterm, sortby, returnSingleAsset) {
-        cip_common.assert(table.catalog.alias !== undefined, "Catalog must have an alias.");
-        cip_common.assert(querystring !== undefined || searchterm !== undefined, "Either querystring or searchterm must be defined.");
+        cipCommon.assert(table.catalog.alias !== undefined, 'Catalog must have an alias.');
+        cipCommon.assert(querystring !== undefined || searchterm !== undefined, 'Either querystring or searchterm must be defined.');
         var cip = this;
 
-        if(returnSingleAsset) {
+        if (returnSingleAsset) {
             // If we are going for a single asset, we might as well exclude the
             // collection and include the view path-parameter right away.
             //
-            cip_common.assert(this.config.constants && this.config.constants.layoutAlias,
-              "The layoutAlias constant must be set in the config.");
+            cipCommon.assert(this.config.constants && this.config.constants.layoutAlias,
+              'The layoutAlias constant must be set in the config.');
 
             // Make the request.
             return this.request([
-              "metadata",
-              "search",
+              'metadata',
+              'search',
               table.catalog.alias,
               this.config.constants.layoutAlias
             ], {
@@ -288,10 +291,10 @@ function CIPClient(config) {
                 table: table.name,
                 maxreturned: 1
             }).then(function(response) {
-                if(response && response.body) {
-                    if(response.body.items) {
-                        if(response.body.items.length === 1) {
-                            return new cip_asset.CIPAsset(cip, response.body.items[0], table.catalog);
+                if (response && response.body) {
+                    if (response.body.items) {
+                        if (response.body.items.length === 1) {
+                            return new cipAsset.CIPAsset(cip, response.body.items[0], table.catalog);
                         } else {
                             throw new Error('Expected one asset, got ' + response.items.length);
                         }
@@ -305,18 +308,18 @@ function CIPClient(config) {
             });
         } else {
             return this.request([
-                "metadata",
-                "search",
+                'metadata',
+                'search',
                 table.catalog.alias
             ], {
                 querystring: querystring,
                 quicksearchstring: searchterm,
                 sortby: sortby,
                 table: table.name,
-                collection: ""  // We pass an empty collection to get the system to create one for us and return the name
+                collection: ''  // We pass an empty collection to get the system to create one for us and return the name
             }).then(function(response) {
-                if(response) {
-                    return new cip_searchresult.CIPSearchResult(cip, response.body, table.catalog);
+                if (response) {
+                    return new cipSearchresult.CIPSearchResult(cip, response.body, table.catalog);
                 } else {
                     throw new Error('Received an empty result from the CIP, when searching.');
                 }
@@ -333,18 +336,18 @@ function CIPClient(config) {
     this.getAsset = function(catalog_alias, asset_id, fetch_metadata) {
         var table = this.getTable(catalog_alias);
         // The asset_id must be sat.
-        cip_common.assert(asset_id !== undefined, "The asset_id must have a value.");
+        cipCommon.assert(asset_id !== undefined, 'The asset_id must have a value.');
 
-        if(fetch_metadata === true) {
+        if (fetch_metadata === true) {
             // Search for the id, no searchterm or sorting. The final boolean argument
             // tells the search to return a single asset, without creating an
             // intermediary result object.
             return this.advancedSearch(table, 'id == ' + asset_id, undefined, null, true);
         } else {
             return new Promise(function (resolve, reject) {
-				var asset = new cip_asset.CIPAsset(this, { id: asset_id }, table.catalog);
-				resolve(asset);
-			});
+        var asset = new cipAsset.CIPAsset(this, { id: asset_id }, table.catalog);
+        resolve(asset);
+      });
         }
     };
 
@@ -355,12 +358,12 @@ function CIPClient(config) {
      * @return {CIPTable} An object representing a table in the CIP.
      */
     this.getTable = function(catalog_alias, table_name) {
-        cip_common.assert(catalog_alias !== undefined, "Catalog must have an alias.");
-        if(typeof(table_name) == "undefined") {
-            table_name = "AssetRecords";
+        cipCommon.assert(catalog_alias !== undefined, 'Catalog must have an alias.');
+        if (typeof(table_name) == 'undefined') {
+            table_name = 'AssetRecords';
         }
-        var catalog = new cip_catalog.CIPCatalog(this, { alias: catalog_alias });
-        var table = new cip_table.CIPTable(this, catalog, table_name);
+        var catalog = new cipCatalog.CIPCatalog(this, { alias: catalog_alias });
+        var table = new cipTable.CIPTable(this, catalog, table_name);
         return table;
     };
 
@@ -370,15 +373,15 @@ function CIPClient(config) {
      * @param {function} error_callback - A function that is called when the request fails.
      */
     this.getVersion = function(callback, error_callback) {
-        cip_common.assert(typeof(callback) === "function", "The callback must be a function.");
+        cipCommon.assert(typeof(callback) === 'function', 'The callback must be a function.');
         this.request(['system', 'getversion']).then(function(response) {
-			return response.version;
-		});
+            return response.version;
+        });
     };
 }
 
-if(process.browser) {
-  window.CIPClient = CIPClient;
+if (process.browser) {
+    window.CIPClient = CIPClient;
 } else {
-  exports.CIPClient = CIPClient;
+    exports.CIPClient = CIPClient;
 }

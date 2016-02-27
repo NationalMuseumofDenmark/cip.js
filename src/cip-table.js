@@ -6,7 +6,7 @@
  * @param {string} name - The name of the table.
  */
 
-var cip_common = require('./cip-common.js'),
+var cipCommon = require('./cip-common.js'),
     cip_layout = require('./cip-layout.js');
 
 function CIPTable(cip, catalog, name) {
@@ -23,8 +23,8 @@ function CIPTable(cip, catalog, name) {
      */
     this.getLayout = function(callback) {
         return cip.request([
-            "metadata",
-            "getlayout",
+            'metadata',
+            'getlayout',
             this.catalog.alias,
             this.cip.config.constants.layout_alias
         ], {

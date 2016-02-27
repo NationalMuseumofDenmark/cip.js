@@ -6,20 +6,20 @@
  * @param {CIPCatalog} catalog - The catalog
  */
 
-var cip_asset = require('./cip-asset.js');
+var cipAsset = require('./cip-asset.js');
 
 function CIPSearchResult(cip, collection, catalog) {
-    if(!cip || !collection || !catalog) {
+    if (!cip || !collection || !catalog) {
       throw new Error('Both CIP, collection and catalog must have values when creating a result.');
     }
     this.total_rows = collection.totalcount;
     this.collection_id = collection.collection;
     this.catalog = catalog;
 
-    if(typeof(this.total_rows) !== 'number') {
+    if (typeof(this.total_rows) !== 'number') {
         throw new Error('A CIPSearchResult.total_rows must be a number.');
     }
-    if(typeof(this.collection_id) !== 'string') {
+    if (typeof(this.collection_id) !== 'string') {
         throw new Error('A CIPSearchResult.collection_id must be a string.');
     }
 
@@ -44,12 +44,12 @@ function CIPSearchResult(cip, collection, catalog) {
             startindex: pointer,
             maxreturned: numRows
         }).then(function(response) {
-            if(response === null || !response.body.items) {
+            if (response === null || !response.body.items) {
                 throw new Error('The request for field values returned a null or empty result.');
             } else {
                 var result = [];
                 for (var i = 0; i < response.body.items.length; i++) {
-                    result.push(new cip_asset.CIPAsset(cip, response.body.items[i], catalog));
+                    result.push(new cipAsset.CIPAsset(cip, response.body.items[i], catalog));
                 }
                 return result;
             }
