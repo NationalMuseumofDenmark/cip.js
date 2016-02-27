@@ -151,6 +151,13 @@ function CIPClient(config) {
                 options.body = data;
             }
             request.post(options, function(err, response) {
+                if (!err && response.statusCode >= 400) {
+                    var msg = 'Error ' + response.statusCode + ' from CIP';
+                    if (response.body && response.body.message) {
+                        msg += ': ' + response.body.message;
+                    }
+                    err = new Error(msg);
+                }
                 if (err) {
                     reject(err);
                 } else {
@@ -318,11 +325,9 @@ function CIPClient(config) {
                 table: table.name,
                 collection: ''  // We pass an empty collection to get the system to create one for us and return the name
             }).then(function(response) {
-                if (response) {
-                    return new cipSearchresult.CIPSearchResult(cip, response.body, table.catalog);
-                } else {
-                    throw new Error('Received an empty result from the CIP, when searching.');
-                }
+                return new cipSearchresult.CIPSearchResult(cip,
+                                                           response.body,
+                                                           table.catalog);
             });
         }
     };
