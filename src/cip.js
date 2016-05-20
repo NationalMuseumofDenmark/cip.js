@@ -236,6 +236,8 @@ function CIPClient(config) {
                 if (catobj.name in aliases)  {
                     var catalog = new cipCatalog.CIPCatalog(client, catalogs[i]);
                     client.cache.catalogs.push(catalog);
+                } else {
+                    throw new Error('The CIP returned an unknown catalog: ' + catobj.name);
                 }
             }
             return client.cache.catalogs;
