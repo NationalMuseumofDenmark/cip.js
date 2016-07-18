@@ -237,7 +237,8 @@ function CIPClient(config) {
                     var catalog = new cipCatalog.CIPCatalog(client, catalogs[i]);
                     client.cache.catalogs.push(catalog);
                 } else {
-                    throw new Error('The CIP returned an unknown catalog: ' + catobj.name);
+                    // throw new Error('The CIP returned an unknown catalog: ' + catobj.name);
+                    continue; // Let's just ignore this
                 }
             }
             return client.cache.catalogs;
