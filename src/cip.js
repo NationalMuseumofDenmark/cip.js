@@ -201,7 +201,7 @@ function CIPClient(config) {
      * Closes the currently open session.
      */
     this.sessionClose = function() {
-        this.request(['session', 'close']);
+        return this.request(['session', 'close']);
     };
 
     /**
