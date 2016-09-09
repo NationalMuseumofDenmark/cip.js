@@ -36,8 +36,8 @@ function CIPClient(config) {
     };
 
     this.defaultNamedParameters = {
-        apiversion: 4,
-        serveraddress: 'localhost'
+        apiversion: config.apiVersion || 4,
+        serveraddress: config.serverAddress || 'localhost'
     };
 
     /**
