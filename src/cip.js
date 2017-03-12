@@ -137,13 +137,16 @@ function CIPClient(config) {
 
         var url = this.generateURL(operation, false);
 
+        var rejectUnauthorized = this.config.trustSelfSigned ? false : true;
+
         return new Promise(function(resolve, reject) {
             var options = {
                 url: url,
                 method: 'POST',
                 timeout: 60000, // 60 secs
                 useQuerystring: true,
-                json: true
+                json: true,
+                rejectUnauthorized: rejectUnauthorized
             };
             if (namedParameters && !data) {
                 options.form = namedParameters;
